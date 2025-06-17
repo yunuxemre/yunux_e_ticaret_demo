@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tansu Şahal Salamura</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm sticky-top main-navbar">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-4" href="/">Tansu Şahal Salamura</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="/">Ana Sayfa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#products">Tüm Ürünler</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about-us-section">Hakkımızda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact-section">İletişim</a></li>
+                </ul>
+                <div class="d-flex align-items-center navbar-user-info">
+                    <span id="userGreeting" class="navbar-text navbar-user-greeting me-3" style="display:none;"></span>
+                    <div class="auth-links-group">
+                        <a href="login.html" id="loginLink" class="text-dark text-decoration-none auth-link">Giriş Yap</a>
+                        <a href="register.html" id="registerLink" class="text-dark text-decoration-none auth-link">Kayıt Ol</a>
+                        <a href="#" id="logoutLink" class="text-dark text-decoration-none auth-link" style="display:none;">Çıkış Yap</a>
+                        <a href="admin.html" id="adminLink" class="text-dark text-decoration-none auth-link" style="display:none;">Admin</a>
+                        <a href="favorites.html" class="btn btn-outline-danger position-relative rounded-pill px-3">
+                            <i class="fas fa-heart me-1"></i> Favoriler
+                            <span id="favorites-item-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">0</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section text-center d-flex align-items-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-10">
+                    <h1 class="display-3 fw-bolder mb-3 hero-title">Tansu Şahal Salamura</h1>
+                    <p class="lead text-white-75 mb-4 mx-auto hero-subtitle" style="max-width: 600px;">
+                        Yöresel Usüller İle Hazırlanan Doğal ve Kaliteli Ürünler.
+                    </p>
+                    <a href="#products" class="btn btn-light btn-lg rounded-pill px-5 py-3 hero-button">Şimdi Keşfet <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="container my-5" id="main-content">
+        <section id="products">
+            <h2 class="text-center mb-5 display-5 fw-light section-title">Ürünlerimiz</h2>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 products-container">
+            </div>
+        </section>
+    </main>
+
+    <section id="about-us-section" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5 display-5 fw-light section-title">Hakkımızda</h2>
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-4 mb-md-0 text-center">
+                    <img src="https://panel.ciftcipark.com/storage/1007/conversions/639259dc-efa0-44b6-a7d9-4b4bd5b6358d-preview_thumbnail.jpg" class="img-fluid rounded shadow-lg" alt="Tansu Şahal Salamura Hakkımızda" style="max-height: 400px; object-fit: cover;">
+                </div>
+                <div class="col-md-6 ps-md-5">
+                    <h3 class="fw-semibold mb-3 text-primary">Doğallığın ve Lezzetin Adresi</h3>
+                    <p class="text-muted">Yöresel Usüller İle Hazırlanan Ürünler<br>
+                         Kapıda Ödeme Seçeneği 💼 <br>
+                         Tüm Türkiye Kargo Gönderim 🚛</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact-section" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5 display-5 fw-light section-title">Bize Ulaşın</h2>
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4 p-md-5">
+                            <form id="contactForm">
+                                <div class="row g-3">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="contactName" class="form-label">Adınız Soyadınız</label>
+                                        <input type="text" class="form-control form-control-lg" id="contactName" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="contactEmail" class="form-label">E-posta Adresiniz</label>
+                                        <input type="email" class="form-control form-control-lg" id="contactEmail" required>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="contactSubject" class="form-label">Konu</label>
+                                        <input type="text" class="form-control form-control-lg" id="contactSubject" required>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="contactMessage" class="form-label">Mesajınız</label>
+                                        <textarea class="form-control form-control-lg" id="contactMessage" rows="5" required></textarea>
+                                    </div>
+                                    <div class="col-12 text-center">
+                                        <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5 py-3">Mesajı Gönder</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div id="contactFormMessage" class="mt-4 text-center fw-medium"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row text-center mt-5 pt-4">
+                <div class="col-md-4 mb-4">
+                    <i class="fas fa-map-marker-alt fa-3x text-primary mb-3"></i>
+                    <h5 class="fw-medium">Adresimiz</h5>
+                    <p class="text-muted">Hacıbey, Eski İzmir Cd. no69, 45600 Alaşehir/Manisa</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <i class="fas fa-phone-alt fa-3x text-primary mb-3"></i>
+                    <h5 class="fw-medium">Telefon</h5>
+                    <p class="text-muted">+90 (536) 035 92 20</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <i class="fas fa-envelope fa-3x text-primary mb-3"></i>
+                    <h5 class="fw-medium">E-posta</h5>
+                    <p class="text-muted">hsahal@windowslive.com</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white text-center p-4 mt-auto">
+        <div class="container">
+            <p class="mb-1">© 2025 Tansu Şahal Salamura. Tüm hakları saklıdır.</p>
+            <p class="small"><a href="#" class="text-white-50">Gizlilik Politikası</a> | <a href="#" class="text-white-50">Kullanım Şartları</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="header-updater.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>

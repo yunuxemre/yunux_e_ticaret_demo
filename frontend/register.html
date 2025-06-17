@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol - Tansu Şahal Salamura</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* login.html ile aynı stilleri kullanır */
+        body { display: flex; flex-direction: column; min-height: 100vh; }
+        main { flex-grow: 1; display: flex; align-items: center; justify-content: center; }
+        .auth-container { width: 100%; max-width: 420px; padding: 2rem; background-color: #fff; border-radius: 0.75rem; box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.1); }
+        .auth-container h2 { text-align: center; margin-bottom: 1.5rem; color: #333; font-weight: 600; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #495057; }
+        .form-control-lg { padding: 0.75rem 1rem; font-size: 1rem; }
+        .btn-submit { width: 100%; padding: 0.75rem; font-size: 1.05em; font-weight: 500; border-radius: 0.5rem; }
+        .message-area { margin-top: 1rem; padding: 0.75rem; border-radius: 0.3rem; text-align: center; display: none; font-size: 0.9rem;}
+        .message-success { background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc;}
+        .message-error { background-color: #f8d7da; color: #842029; border: 1px solid #f5c2c7;}
+        .auth-links { text-align: center; margin-top: 1.5rem; font-size: 0.9rem; }
+        .auth-links a { color: #007bff; text-decoration: none; }
+        .auth-links a:hover { text-decoration: underline; }
+
+        .navbar-user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-user-greeting {
+            margin-right: 1rem;
+        }
+
+        .auth-links-group a {
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-user-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .navbar-user-greeting {
+                margin-bottom: 0.5rem;
+            }
+
+            .auth-links-group {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .auth-links-group a {
+                margin-bottom: 0.5rem;
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar (Header) - index.html'den kopyalandı -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-4" href="/">Tansu Şahal Salamura</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                    aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item"> <a class="nav-link" href="/">Ana Sayfa</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="#">Tüm Ürünler</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="#">Hakkımızda</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="#">İletişim</a> </li>
+                </ul>
+                <div class="d-flex align-items-center navbar-user-info">
+                    <span id="userGreeting" class="navbar-text navbar-user-greeting me-3" style="display:none;"></span>
+                    <div class="auth-links-group">
+                        <a href="login.html" id="loginLink" class="text-dark text-decoration-none auth-link">Giriş Yap</a>
+                        <a href="register.html" id="registerLink" class="text-dark text-decoration-none auth-link">Kayıt Ol</a>
+                        <a href="#" id="logoutLink" class="text-dark text-decoration-none auth-link" style="display:none;">Çıkış Yap</a>
+                        <a href="admin.html" id="adminLink" class="btn btn-info btn-sm auth-link" style="display:none;">Admin</a>
+                        <a href="favorites.html" class="btn btn-outline-danger position-relative rounded-pill px-3">
+                            <i class="fas fa-heart me-1"></i> Favoriler
+                            <span id="favorites-item-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">0</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="auth-container">
+            <h2>Yeni Hesap Oluştur</h2>
+            <div id="registerMessageArea" class="message-area"></div>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="name">Ad Soyad:</label>
+                    <input type="text" class="form-control form-control-lg" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-posta Adresi:</label>
+                    <input type="email" class="form-control form-control-lg" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Şifre (en az 6 karakter):</label>
+                    <input type="password" class="form-control form-control-lg" id="password" name="password" minlength="6" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Şifre Tekrar:</label>
+                    <input type="password" class="form-control form-control-lg" id="confirmPassword" name="confirmPassword" minlength="6" required>
+                </div>
+                <button type="submit" class="btn btn-success btn-submit mt-3">Kayıt Ol</button>
+            </form>
+            <div class="auth-links">
+                <p>Zaten bir hesabınız var mı? <a href="login.html">Giriş Yapın</a></p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white text-center p-4 mt-auto">
+        <div class="container"><p class="mb-0">© 2025 Tansu Şahal Salamura</p></div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="auth-scripts.js"></script> <!-- Sadece auth işlemleri için -->
+    <script src="header-updater.js"></script> <!-- SADECE header UI güncellemesi için ayrı bir script -->
+</body>
+</html>

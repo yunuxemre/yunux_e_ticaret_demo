@@ -1,0 +1,405 @@
+/* frontend/styles.css */
+
+/* Google Font (Poppins) */
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f8f9fa;
+  color: #212529;
+  line-height: 1.6;
+  display: flex; /* Footer'ı en alta itmek için */
+  flex-direction: column; /* Footer'ı en alta itmek için */
+  min-height: 100vh; /* Footer'ı en alta itmek için */
+}
+
+main.container,
+section.container {
+  /* Ana içerik alanları için */
+  flex-grow: 1; /* Footer'ı en alta itmek için */
+}
+
+/* Navbar */
+.navbar-light.bg-white {
+  border-bottom: 1px solid #e9ecef;
+}
+.navbar-brand {
+  letter-spacing: 0.5px;
+  color: #1a2533 !important;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.nav-link {
+  font-weight: 500;
+  color: #495057 !important;
+  transition: color 0.2s ease;
+  margin: 0 0.5rem;
+  padding: 0.5rem 0.75rem !important;
+}
+.nav-link:hover,
+.nav-link.active {
+  color: #0d6efd !important;
+}
+
+/* Navbar User Info - Desktop */
+.navbar-user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.navbar-user-greeting {
+  white-space: nowrap;
+  font-size: 0.85rem;
+  color: #0d6efd !important;
+  font-weight: 600;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.auth-links-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.auth-link {
+  font-weight: 500;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+  text-decoration: none !important;
+}
+
+.auth-link:hover {
+  background-color: #f8f9fa;
+  color: #0d6efd !important;
+}
+
+/* Admin butonu özel stil - normal link gibi */
+#adminLink {
+  background: none !important;
+  border: none !important;
+  color: #495057 !important;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.6rem;
+  font-weight: 500;
+}
+
+#adminLink:hover {
+  background-color: #f8f9fa !important;
+  color: #0d6efd !important;
+}
+
+/* Favoriler butonu */
+.btn-outline-danger {
+  font-size: 0.85rem;
+  padding: 0.4rem 0.8rem;
+  white-space: nowrap;
+}
+
+.btn-outline-danger .badge {
+  font-size: 0.7em;
+  padding: 0.3em 0.5em;
+  line-height: 1;
+}
+
+/* Hero Section */
+.hero-section {
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)),
+    url("https://images4.alphacoders.com/766/766523.jpg");
+  background-size: cover;
+  background-position: center 70%;
+  background-repeat: no-repeat;
+  min-height: 75vh;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+}
+.hero-section .hero-title {
+  font-size: 3.5rem;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+.hero-section .hero-subtitle {
+  font-size: 1.25rem;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+.hero-section .hero-button {
+  font-weight: 600;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hero-section .hero-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Section Başlıkları */
+.section-title {
+  color: #343a40;
+  position: relative;
+  padding-bottom: 15px;
+  margin-bottom: 40px !important;
+}
+.section-title::after {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: #0d6efd;
+  bottom: 0;
+  left: calc(50% - 30px);
+}
+
+/* Ürün Kartları */
+.product-card {
+  transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+  border: none;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+.product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.12) !important;
+}
+.product-card .card-img-top {
+  border-bottom: 1px solid #f0f0f0;
+  transition: transform 0.3s ease;
+}
+.product-card:hover .card-img-top {
+  transform: scale(1.05);
+}
+.product-card .card-body {
+  padding: 1.25rem;
+}
+.product-card .card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #212529;
+  min-height: 2.6em;
+}
+.product-card .card-text_description {
+  font-size: 0.85rem;
+  color: #6c757d;
+  min-height: 4em;
+}
+.product-card .card-text_stock small {
+  font-size: 0.8rem;
+  color: #888;
+}
+.product-card .text-primary {
+  color: #007bff !important;
+}
+.product-card .add-to-cart-button {
+  font-weight: 500;
+  padding: 0.6rem 1rem;
+}
+.product-card .add-to-cart-button:disabled {
+  background-color: #adb5bd;
+  border-color: #adb5bd;
+}
+
+/* Stokta yok mesajı */
+.out-of-stock small {
+  color: #e74c3c !important;
+  font-weight: 500;
+}
+
+/* Footer */
+footer.bg-dark p {
+  margin-bottom: 0.2rem;
+}
+footer.bg-dark a {
+  transition: color 0.2s ease;
+}
+footer.bg-dark a:hover {
+  color: #fff !important;
+}
+
+/* Responsive Navbar - Mobil için özel düzenlemeler */
+@media (max-width: 991.98px) {
+  /* Navbar brand küçült */
+  .navbar-brand {
+    font-size: 1.1rem;
+  }
+
+  /* Ana menü linklerini düzenle */
+  .navbar-nav {
+    text-align: center;
+    margin: 1rem 0;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .navbar-nav .nav-item {
+    margin: 0.25rem 0;
+  }
+
+  .navbar-nav .nav-link {
+    padding: 0.75rem 1rem !important;
+    margin: 0;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+  }
+
+  .navbar-nav .nav-link:hover {
+    background-color: #f8f9fa;
+  }
+
+  /* User info bölümünü yeniden düzenle */
+  .navbar-user-info {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+  }
+
+  /* Kullanıcı selamlaması */
+  .navbar-user-greeting {
+    font-size: 1rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: #e7f3ff;
+    border-radius: 0.375rem;
+    color: #0d6efd !important;
+    width: 100%;
+    max-width: none;
+  }
+
+  /* Auth linkler grubu */
+  .auth-links-group {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  /* Auth linkler */
+  .auth-link {
+    display: block;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    color: #495057 !important;
+    font-weight: 500;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .auth-link:hover {
+    background-color: #0d6efd;
+    color: #ffffff !important;
+    border-color: #0d6efd;
+  }
+
+  /* Admin butonu - mobilde normal link gibi */
+  #adminLink {
+    background-color: #ffffff !important;
+    border: 1px solid #dee2e6 !important;
+    color: #495057 !important;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+  }
+
+  #adminLink:hover {
+    background-color: #0d6efd !important;
+    color: #ffffff !important;
+    border-color: #0d6efd !important;
+  }
+
+  /* Favoriler butonu */
+  .btn-outline-danger {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-outline-danger:hover {
+    background-color: #dc3545;
+    border-color: #dc3545;
+  }
+}
+
+/* Çok küçük ekranlar için */
+@media (max-width: 575.98px) {
+  .navbar-brand {
+    font-size: 1rem;
+  }
+
+  .navbar-user-info {
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  .navbar-user-greeting {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+  }
+
+  .auth-links-group {
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .auth-link,
+  #adminLink,
+  .btn-outline-danger {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.95rem;
+    width: 100%;
+    max-width: 260px;
+    text-align: center;
+  }
+
+  .btn-outline-danger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-section {
+    min-height: 60vh;
+    padding: 3rem 0;
+  }
+
+  .hero-section .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .hero-section .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .product-card .card-title {
+    min-height: auto;
+  }
+
+  .product-card .card-text_description {
+    min-height: auto;
+    -webkit-line-clamp: 2;
+  }
+}

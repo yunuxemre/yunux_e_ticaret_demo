@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorilerim - Tansu Şahal Salamura</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Kendi Özel Stillerimiz -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Favoriler sayfasına özel stiller */
+        body { display: flex; flex-direction: column; min-height: 100vh; }
+        main.container { flex-grow: 1; }
+        .favorites-container { padding: 2rem; background-color: #fff; border-radius: 0.75rem; box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.08); }
+        .favorite-item { display: flex; align-items: center; border-bottom: 1px solid #e9ecef; padding: 1.25rem 0; }
+        .favorite-item:last-child { border-bottom: none; }
+        .favorite-item img { width: 100px; height: 100px; object-fit: cover; margin-right: 1.5rem; border-radius: 0.375rem; border: 1px solid #dee2e6;}
+        .favorite-item-details { flex-grow: 1; }
+        .favorite-item-details h4 { margin: 0 0 0.5rem 0; font-size: 1.2rem; font-weight: 600; color: #343a40;}
+        .favorite-item-details p { margin: 0 0 0.25rem 0; color: #6c757d; font-size: 0.9rem; }
+        .favorite-item-price { font-weight: 700; font-size: 1.3rem; color: #0d6efd; margin-right: 1rem;}
+        .favorite-item-actions { display: flex; flex-direction: column; gap: 0.5rem; }
+        .favorite-item-remove button { background: none; border: none; color: #dc3545; cursor: pointer; font-size: 1.2rem; padding: 0.5rem; line-height: 1;}
+        .favorite-item-remove button:hover { color: #a71d2a; }
+        .favorites-summary { margin-top: 2.5rem; text-align: center; border-top: 2px solid #dee2e6; padding-top: 1.5rem; }
+        .favorites-summary h3 { margin-bottom: 1rem; font-weight: 600; color: #343a40; }
+        .favorites-actions button { padding: 0.75rem 1.5rem; font-size: 1.05em; cursor: pointer; border-radius: 0.5rem; margin: 0.5rem; font-weight: 500;}
+        .empty-favorites-message { text-align: center; padding: 3rem 1rem; color: #6c757d; font-size: 1.2rem; }
+        .empty-favorites-message i { font-size: 3rem; display: block; margin-bottom: 1rem; color: #ced4da;}
+        .btn-trendyol { background: #f27a1a; border: none; color: white; }
+        .btn-trendyol:hover { background: #e06c0d; color: white; }
+    </style>
+</head>
+<body>
+    <!-- Navbar (Header) -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm sticky-top main-navbar">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-4" href="/">Tansu Şahal Salamura</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item"> <a class="nav-link" href="/">Ana Sayfa</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="/#products">Tüm Ürünler</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="/#about-us-section">Hakkımızda</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="/#contact-section">İletişim</a> </li>
+                </ul>
+                <div class="d-flex align-items-center navbar-user-info">
+                    <span id="userGreeting" class="navbar-text navbar-user-greeting me-3" style="display:none;"></span>
+                    <div class="auth-links-group">
+                        <a href="login.html" id="loginLink" class="text-dark text-decoration-none auth-link">Giriş Yap</a>
+                        <a href="register.html" id="registerLink" class="text-dark text-decoration-none auth-link">Kayıt Ol</a>
+                        <a href="#" id="logoutLink" class="text-dark text-decoration-none auth-link" style="display:none;">Çıkış Yap</a>
+                        <a href="admin.html" id="adminLink" class="text-dark text-decoration-none auth-link" style="display:none;">Admin</a>
+                        <a href="favorites.html" class="btn btn-outline-danger position-relative rounded-pill px-3">
+                            <i class="fas fa-heart me-1"></i> Favoriler
+                            <span id="favorites-item-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">0</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        <div class="favorites-container">
+            <h2 class="mb-4"><i class="fas fa-heart text-danger me-2"></i>Favorilerim</h2>
+            <div id="favorites-items-list">
+                <!-- Favori ürünleri buraya JavaScript ile eklenecek -->
+                <div class="empty-favorites-message" style="display: none;">
+                    <i class="fas fa-heart-broken"></i>
+                    <p>Henüz favori ürününüz bulunmuyor.</p>
+                    <a href="/" class="btn btn-primary rounded-pill px-4">Ürünleri Keşfet</a>
+                </div>
+            </div>
+
+            <div class="favorites-summary" style="display: none;">
+                <h3>Toplam <span id="favorites-total-count" class="text-danger">0</span> favori ürün</h3>
+                <div class="favorites-actions mt-3">
+                    <button class="btn btn-danger clear-favorites-button"><i class="fas fa-trash-alt me-1"></i> Tüm Favorileri Temizle</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white text-center p-4 mt-auto">
+        <div class="container"><p class="mb-0">© 2025 Tansu Şahal Salamura</p></div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="favorites-scripts.js"></script>
+    <script src="header-updater.js"></script>
+</body>
+</html>
