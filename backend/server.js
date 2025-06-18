@@ -49,13 +49,13 @@ const createAdminUser = async () => {
 
 const express = require("express")
 const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 10000 // Render için 10000
 
+// CORS ayarları - Render için güncellenmiş
 const corsOptions = {
-  origin:
-    process.env.NODE_ENV === "production"
-      ? [process.env.FRONTEND_URL, "https://yourdomain.com"]
-      : ["http://localhost:3000", "http://127.0.0.1:3000"],
+  origin: process.env.NODE_ENV === "production"
+    ? true // Aynı domain'den gelen isteklere izin ver
+    : ["http://localhost:3000", "http://127.0.0.1:3000"],
   credentials: true,
   optionsSuccessStatus: 200,
 }
@@ -73,9 +73,10 @@ app.use("/api/admin/", adminLimiter)
 app.use(express.json({ limit: "10mb" }))
 app.use(express.urlencoded({ extended: true, limit: "10mb" }))
 
+// Video upload ayarları - Render için düzeltilmiş
 const videoStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, "../frontend/videos")
+    const uploadPath = path.resolve(__dirname, "../frontend/videos")
     if (!fs.existsSync(uploadPath)) {
       fs.mkdirSync(uploadPath, { recursive: true })
     }
@@ -105,11 +106,21 @@ const videoUpload = multer({
   },
 })
 
-const frontendPath = path.join(__dirname, "../frontend")
-app.use(express.static(frontendPath))
+// Frontend static files - Render için düzeltilmiş
+const frontendPath = path.resolve(__dirname, "../frontend")
+console.log('Frontend path:', frontendPath)
 
+if (fs.existsSync(frontendPath)) {
+  app.use(express.static(frontendPath))
+  console.log('✅ Frontend klasörü bulundu ve serve ediliyor'.green)
+} else {
+  console.log('❌ Frontend klasörü bulunamadı:'.red, frontendPath)
+}
+
+// API Routes
 app.use("/api/users", userRoutes)
 
+// Video upload endpoint
 app.post("/api/admin/upload-video", uploadLimiter, protect, admin, videoUpload.single("video"), (req, res) => {
   try {
     if (!req.file) {
@@ -128,6 +139,7 @@ app.post("/api/admin/upload-video", uploadLimiter, protect, admin, videoUpload.s
   }
 })
 
+// Products API
 app.get("/api/products", async (req, res) => {
   try {
     const products = await Product.find({})
@@ -222,6 +234,83 @@ app.delete("/api/admin/products/:id", protect, admin, validateObjectId, handleVa
   }
 })
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV
+  });
+});
+
+// Ana sayfa route - Frontend index.html serve et
+app.get('/', (req, res) => {
+  const indexPath = path.join(frontendPath, 'index.html')
+  
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath)
+  } else {
+    res.json({
+      message: 'Tansu Şahal Salamura Backend API çalışıyor! 🥒',
+      version: '1.0.0',
+      status: 'OK',
+      endpoints: {
+        products: '/api/products',
+        users: '/api/users/login',
+        admin: '/api/admin/products',
+        health: '/health'
+      },
+      frontendPath: frontendPath,
+      indexExists: fs.existsSync(indexPath)
+    })
+  }
+});
+
+// Catch-all route for SPA
+app.get('*', (req, res) => {
+  // API route'ları için 404
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ 
+      message: 'API endpoint bulunamadı',
+      path: req.path 
+    });
+  }
+  
+  // Frontend için index.html serve et
+  const indexPath = path.join(frontendPath, 'index.html')
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath)
+  } else {
+    res.status(404).send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Tansu Şahal Salamura</title>
+        <style>
+          body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+          .container { max-width: 600px; margin: 0 auto; }
+          .error { color: #dc3545; }
+          .success { color: #28a745; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>🥒 Tansu Şahal Salamura</h1>
+          <p class="error">Frontend dosyaları bulunamadı</p>
+          <p>Backend API çalışıyor</p>
+          <div>
+            <a href="/api/products">Ürünleri Görüntüle</a> | 
+            <a href="/health">Health Check</a>
+          </div>
+        </div>
+      </body>
+      </html>
+    `)
+  }
+});
+
+// Error handler
 app.use((error, req, res, next) => {
   console.error("Global Error Handler:", error)
 
@@ -236,13 +325,20 @@ app.use((error, req, res, next) => {
   })
 })
 
-app.listen(port, () => {
-  console.log(`Sunucu http://localhost:${port} adresinde çalışıyor`.yellow)
-  console.log("Güvenlik Önlemleri Aktif".green.bold)
+// Server başlat
+app.listen(port, '0.0.0.0', () => {
+  console.log(`🚀 Sunucu http://localhost:${port} adresinde çalışıyor`.yellow)
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`.blue)
+  console.log("🔒 Güvenlik Önlemleri Aktif".green.bold)
+  
+  // Environment variables kontrol
   if (!process.env.JWT_SECRET) {
-    console.warn("UYARI: JWT_SECRET .env'de eksik!".red.bold)
+    console.warn("⚠️  UYARI: JWT_SECRET .env'de eksik!".red.bold)
   }
   if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
-    console.warn("UYARI: ADMIN_EMAIL/PASSWORD .env'de eksik.".yellow.bold)
+    console.warn("⚠️  UYARI: ADMIN_EMAIL/PASSWORD .env'de eksik.".yellow.bold)
+  }
+  if (!process.env.MONGODB_URI) {
+    console.warn("⚠️  UYARI: MONGODB_URI .env'de eksik!".red.bold)
   }
 })
