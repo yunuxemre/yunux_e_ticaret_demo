@@ -253,3 +253,22 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // --- END OF FILE admin-scripts.js ---
+const selectVideoBtn = document.getElementById("selectVideoBtn");
+const videoFileInput = document.getElementById("videoFile");
+
+if (selectVideoBtn && videoFileInput) {
+  selectVideoBtn.addEventListener("click", () => {
+    videoFileInput.click();
+  });
+}
+
+videoFileInput.addEventListener("change", () => {
+  const file = videoFileInput.files[0];
+  if (file) {
+    const videoPreview = document.getElementById("videoPreview");
+    const videoSource = document.getElementById("videoSource");
+    videoSource.src = URL.createObjectURL(file);
+    videoPreview.style.display = "block";
+    videoPreview.querySelector("video").load();
+  }
+});
