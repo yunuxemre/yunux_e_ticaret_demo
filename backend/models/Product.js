@@ -30,7 +30,7 @@ const productSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    trendyolLink: {
+    purchaseLink: {
       type: String,
       default: "",
     },

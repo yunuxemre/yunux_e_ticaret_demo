@@ -169,7 +169,7 @@ app.get("/api/products/:id", validateObjectId, handleValidationErrors, async (re
 
 app.post("/api/admin/products", protect, admin, validateProduct, handleValidationErrors, async (req, res) => {
   try {
-    const { name, price, description, image, stock, videoUrl, trendyolLink, category } = req.body
+    const { name, price, description, image, stock, videoUrl, purchaseLink, category } = req.body
 
     const product = new Product({
       name,
@@ -178,7 +178,7 @@ app.post("/api/admin/products", protect, admin, validateProduct, handleValidatio
       image: image || "/images/default-product.png",
       stock: Number(stock),
       videoUrl: videoUrl || "",
-      trendyolLink: trendyolLink || "",
+      purchaseLink: purchaseLink || "",
       category: category || "Genel",
     })
     const createdProduct = await product.save()
@@ -198,7 +198,7 @@ app.put(
   handleValidationErrors,
   async (req, res) => {
     try {
-      const { name, price, description, image, stock, videoUrl, trendyolLink, category } = req.body
+      const { name, price, description, image, stock, videoUrl, purchaseLink, category } = req.body
       const product = await Product.findById(req.params.id)
       if (product) {
         product.name = name || product.name
@@ -207,8 +207,8 @@ app.put(
         product.image = image !== undefined ? (image.trim() === "" ? product.image : image.trim()) : product.image
         if (stock !== undefined) product.stock = Number(stock)
         product.videoUrl = videoUrl !== undefined ? (videoUrl.trim() === "" ? "" : videoUrl.trim()) : product.videoUrl
-        product.trendyolLink =
-          trendyolLink !== undefined ? (trendyolLink.trim() === "" ? "" : trendyolLink.trim()) : product.trendyolLink
+        product.purchaseLink =
+          purchaseLink !== undefined ? (purchaseLink.trim() === "" ? "" : purchaseLink.trim()) : product.purchaseLink
         product.purchaseLink =
           req.body.purchaseLink !== undefined
             ? req.body.purchaseLink.trim() === ""

@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", async () => {
              </span>
            </p>`
 
-    const trendyolLink = product.trendyolLink || "https://www.trendyol.com/magaza/tansusahalsalamura-m-1013741?sst=0"
+    const purchaseLink = product.purchaseLink || "https://www.shopier.com/tansusahalsalamura?fbclid=PAZXh0bgNhZW0CMTEAAacBvI7-Wr0j9KJw2YfgFOzJRt3a4boCj5kG2sQEGjMuBBcGxDrqdz_lHng5ig_aem_-hd3SXrVz4kSBkCwAr40ag"
 
     const imageCol = document.createElement("div")
     imageCol.className = "col-lg-7 col-md-6 product-gallery-col text-center mb-4 mb-lg-0"
@@ -93,11 +93,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       <p class="product-price-display mb-3" id="productPrice">${(product.price / 100).toFixed(2)} TL</p>
       ${stockStatusHTML}
       
-      <a href="${trendyolLink}" target="_blank" class="btn btn-trendyol btn-lg rounded-pill w-100 shadow-sm mb-3">
-        <i class="fas fa-shopping-cart me-2"></i>Trendyol'da Satın Al
+      <a href="${purchaseLink}" target="_blank" class="btn btn-trendyol btn-lg rounded-pill w-100 shadow-sm mb-3">
+        <i class="fas fa-shopping-cart me-2"></i>Shopier'da Satın Al
       </a>
       
-      <p class="text-muted small mt-3 text-center">Bu ürünü güvenle Trendyol mağazamızdan satın alabilirsiniz.</p>
+      <p class="text-muted small mt-3 text-center">Bu ürünü güvenle Shopier mağazamızdan satın alabilirsiniz.</p>
 
       <div class="scroll-to-description-area mt-4 pt-3">
         <p class="text-muted mb-2 small">Ürün hakkında daha fazla bilgi için:</p>

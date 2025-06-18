@@ -1,5 +1,65 @@
 // --- START OF FILE admin-scripts.js ---
 
+// Bildirim sistemi fonksiyonları
+let notificationCount = 0;
+
+const showNotification = (title, message, type = 'success', duration = 5000) => {
+  const container = document.getElementById('notificationContainer');
+  if (!container) return;
+
+  notificationCount++;
+  updateNotificationBadge();
+
+  const notification = document.createElement('div');
+  notification.className = `notification-bubble ${type}`;
+  
+  let icon = '';
+  switch(type) {
+    case 'success': icon = 'fas fa-check-circle'; break;
+    case 'error': icon = 'fas fa-exclamation-circle'; break;
+    case 'warning': icon = 'fas fa-exclamation-triangle'; break;
+    case 'info': icon = 'fas fa-info-circle'; break;
+    default: icon = 'fas fa-bell';
+  }
+
+  notification.innerHTML = `
+    <div class="notification-header">
+      <div class="notification-title">
+        <i class="${icon}"></i>
+        ${title}
+      </div>
+      <button class="notification-close" onclick="closeNotification(this)">×</button>
+    </div>
+    <div class="notification-message">${message}</div>
+    <div class="notification-time">${new Date().toLocaleTimeString('tr-TR')}</div>
+    <div class="notification-progress"></div>
+  `;
+
+  container.appendChild(notification);
+  setTimeout(() => notification.classList.add('show'), 100);
+  setTimeout(() => closeNotification(notification.querySelector('.notification-close')), duration);
+};
+
+const closeNotification = (closeBtn) => {
+  const notification = closeBtn.closest('.notification-bubble');
+  if (!notification) return;
+  notification.classList.remove('show');
+  setTimeout(() => {
+    notification.remove();
+    notificationCount = Math.max(0, notificationCount - 1);
+    updateNotificationBadge();
+  }, 400);
+};
+
+const updateNotificationBadge = () => {
+  const badge = document.getElementById('notificationBadge');
+  const countElement = document.getElementById('notificationCount');
+  if (badge && countElement) {
+    countElement.textContent = notificationCount;
+    badge.classList.toggle('hidden', notificationCount === 0);
+  }
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   // --- ELEMENT SEÇİCİLER VE SABİTLER ---
   const productForm = document.getElementById("productForm")
@@ -41,15 +101,36 @@ document.addEventListener("DOMContentLoaded", () => {
   const checkAdminAuth = () => {
     const userInfo = getUserInfo()
     if (!userInfo || !userInfo.token || userInfo.role !== "admin") {
-      showAdminMessage("Bu sayfaya erişim yetkiniz yok veya giriş yapmanız gerekiyor.", "error")
+      showNotification('🔒 Yetki Hatası!', 'Bu sayfaya erişim yetkiniz yok veya giriş yapmanız gerekiyor.', 'error', 7000);
       return null
     }
     return userInfo.token
   }
 
   const showAdminMessage = (message, type = "success") => {
+    // Yeni bildirim sistemi
+    let title = ""
+    switch (type) {
+      case "success":
+        title = "Başarılı!"
+        break
+      case "error":
+        title = "Hata!"
+        break
+      case "warning":
+        title = "Uyarı!"
+        break
+      case "info":
+        title = "Bilgi"
+        break
+      default:
+        title = "Bildirim"
+    }
+
+    showNotification(title, message, type);
+
+    // Eski sistem de çalışsın (opsiyonel)
     if (!adminMessageArea) {
-      alert(`${type === "error" ? "HATA: " : ""}${message}`)
       return
     }
     adminMessageArea.textContent = message
@@ -97,7 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const embedUrl = convertYoutubeLink(currentUrl)
           if (embedUrl !== currentUrl) {
             e.target.value = embedUrl
-            showAdminMessage("YouTube linki embed formatına çevrildi.", "success")
+            showNotification('🔗 Link Dönüştürüldü!', 'YouTube linki embed formatına çevrildi.', 'info', 3000);
           }
         }
       }, 500)
@@ -172,9 +253,9 @@ document.addEventListener("DOMContentLoaded", () => {
           if (video) video.load()
         }
 
-        showAdminMessage("Video başarıyla yüklendi!", "success")
+        showNotification('📹 Video Yüklendi!', 'Video dosyası başarıyla yüklendi ve ürüne eklendi.', 'success', 5000);
       } catch (error) {
-        showAdminMessage(`Video yükleme hatası: ${error.message}`, "error")
+        showNotification('❌ Video Yükleme Hatası!', `Video yüklenirken bir hata oluştu: ${error.message}`, 'error', 7000);
         videoFileInput.value = ""
       } finally {
         if (uploadProgress) {
@@ -194,7 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
         videoPreview.style.display = "none"
       }
 
-      showAdminMessage("Video kaldırıldı", "success")
+      showNotification('🗑️ Video Kaldırıldı!', 'Video başarıyla kaldırıldı.', 'info', 3000);
     })
   }
 
@@ -209,7 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (targetTab === "upload-tab" && videoUrlValue.includes("youtube")) {
         if (confirm("Video dosyası yüklemek için YouTube linkini temizlemek gerekiyor. Devam etmek istiyor musunuz?")) {
           videoUrlInput.value = ""
-          showAdminMessage("YouTube linki temizlendi", "success")
+          showNotification('🔄 Sekme Değiştirildi!', 'YouTube linki temizlendi, video yükleme sekmesine geçildi.', 'info', 4000);
         } else {
           e.preventDefault()
           e.stopPropagation()
@@ -220,7 +301,7 @@ document.addEventListener("DOMContentLoaded", () => {
           videoUrlInput.value = ""
           if (videoFileInput) videoFileInput.value = ""
           if (videoPreview) videoPreview.style.display = "none"
-          showAdminMessage("Video dosyası temizlendi", "success")
+          showNotification('🔄 Sekme Değiştirildi!', 'Video dosyası temizlendi, YouTube sekmesine geçildi.', 'info', 4000);
         } else {
           e.preventDefault()
           e.stopPropagation()
@@ -273,70 +354,48 @@ document.addEventListener("DOMContentLoaded", () => {
   const validateForm = () => {
     // Temel alanları kontrol et
     if (!nameInput.value.trim()) {
-      showAdminMessage("Ürün adı gereklidir.", "error")
+      showNotification('⚠️ Eksik Bilgi!', 'Ürün adı gereklidir.', 'warning', 5000);
       nameInput.focus()
       return false
     }
 
     if (!descriptionInput.value.trim()) {
-      showAdminMessage("Ürün açıklaması gereklidir.", "error")
+      showNotification('⚠️ Eksik Bilgi!', 'Ürün açıklaması gereklidir.', 'warning', 5000);
       descriptionInput.focus()
       return false
     }
 
     const price = Number.parseFloat(priceInput.value.replace(",", "."))
     if (isNaN(price) || price < 0) {
-      showAdminMessage("Lütfen geçerli ve pozitif bir fiyat girin.", "error")
+      showNotification('⚠️ Geçersiz Fiyat!', 'Lütfen geçerli ve pozitif bir fiyat girin.', 'warning', 5000);
       priceInput.focus()
       return false
     }
 
     const stock = Number.parseInt(stockInput.value)
     if (isNaN(stock) || stock < 0) {
-      showAdminMessage("Lütfen geçerli bir stok adedi girin.", "error")
+      showNotification('⚠️ Geçersiz Stok!', 'Lütfen geçerli bir stok adedi girin.', 'warning', 5000);
       stockInput.focus()
       return false
     }
 
-    // Video URL kontrolü (opsiyonel ama dolu ise geçerli olmalı)
-    if (videoUrlInput.value.trim()) {
-      const videoUrl = videoUrlInput.value.trim()
-      if (!videoUrl.startsWith("http")) {
-        showAdminMessage("Video URL'si http:// veya https:// ile başlamalıdır.", "error")
-        // YouTube sekmesini aktif et
-        const youtubeTab = document.getElementById("youtube-tab")
-        if (youtubeTab) {
-          const tab = new bootstrap.Tab(youtubeTab)
-          tab.show()
-        }
-        setTimeout(() => videoUrlInput.focus(), 100)
-        return false
-      }
-    }
+    // Video URL kontrolünü kaldırdık - artık her türlü video URL'si kabul edilecek
 
     return true
   }
 
   // --- ANA EVENT LISTENERS ---
 
-  // Form submit - Video URL validation eklentisi
   if (productForm) {
     productForm.addEventListener("submit", async (e) => {
       e.preventDefault()
 
-      // Mevcut validation'a ek olarak video URL kontrolü
-      const videoUrl = videoUrlInput?.value?.trim() || ""
-      if (videoUrl) {
-        // Video URL'sinin geçerli olduğunu kontrol et
-        const isYouTube = videoUrl.includes("youtube") || videoUrl.includes("youtu.be")
-        const isUploadedVideo = videoUrl.startsWith("/videos/")
-        const isValidUrl = /^https?:\/\/.+/.test(videoUrl)
-
-        if (!isYouTube && !isUploadedVideo && !isValidUrl) {
-          showAdminMessage("Geçerli bir video URL'si giriniz (YouTube linki veya yüklenen video)", "error")
-          return
-        }
+      // Custom validation
+      if (!validateForm()) {
+        return
       }
+
+      // Video URL kontrolünü kaldırdık - artık validation yok
 
       const token = checkAdminAuth()
       if (!token) return
@@ -369,11 +428,18 @@ document.addEventListener("DOMContentLoaded", () => {
           const errData = await response.json().catch(() => ({ message: "Bilinmeyen bir sunucu hatası" }))
           throw new Error(errData.message)
         }
-        showAdminMessage(id ? "Ürün başarıyla güncellendi!" : "Ürün başarıyla eklendi!", "success")
+        
+        // Başarılı bildirim
+        if (id) {
+          showNotification('🎉 Güncelleme Başarılı!', `"${productData.name}" ürünü başarıyla güncellendi.`, 'success', 6000);
+        } else {
+          showNotification('✨ Yeni Ürün Eklendi!', `"${productData.name}" ürünü başarıyla eklendi.`, 'success', 6000);
+        }
+        
         clearForm()
         fetchProducts()
       } catch (error) {
-        showAdminMessage(`Hata: ${error.message}`, "error")
+        showNotification('❌ İşlem Başarısız!', `Hata: ${error.message}`, 'error', 7000);
       }
     })
   }
@@ -400,10 +466,10 @@ document.addEventListener("DOMContentLoaded", () => {
               const errorData = await response.json().catch(() => ({ message: "Silme işlemi başarısız." }))
               throw new Error(errorData.message)
             }
-            showAdminMessage("Ürün başarıyla silindi!", "success")
+            showNotification('🗑️ Ürün Silindi!', 'Ürün başarıyla silindi ve listeden kaldırıldı.', 'success', 5000);
             fetchProducts()
           } catch (error) {
-            showAdminMessage(`Hata: ${error.message}`, "error")
+            showNotification('❌ Silme Hatası!', `Hata: ${error.message}`, 'error', 7000);
           }
         }
       } else if (button.classList.contains("edit-product")) {
@@ -425,9 +491,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
           // Video preview ayarla
           if (product.videoUrl) {
-            // Event listener'ları geçici olarak devre dışı bırak
-            const isEditMode = true
-
             if (product.videoUrl.includes("youtube")) {
               // YouTube sekmesini aktif et
               const youtubeTab = document.getElementById("youtube-tab")
@@ -472,14 +535,27 @@ document.addEventListener("DOMContentLoaded", () => {
           }
 
           productForm.querySelector('button[type="submit"]').textContent = "Güncelle"
+          showNotification('📝 Düzenleme Modu!', `"${product.name}" ürünü düzenleme için yüklendi.`, 'info', 4000);
 
           // ✅ OTOMATİK KAYDIRMA: Düzenleme formuna git
           document.getElementById("addProductSection").scrollIntoView({ behavior: "smooth" })
         } catch (error) {
-          showAdminMessage(`Hata: ${error.message}`, "error")
+          showNotification('❌ Yükleme Hatası!', `Hata: ${error.message}`, 'error', 7000);
         }
       }
     })
+  }
+
+  // Badge click eventi
+  const badge = document.getElementById('notificationBadge');
+  if (badge) {
+    badge.addEventListener('click', () => {
+      const notifications = document.querySelectorAll('.notification-bubble');
+      notifications.forEach(notification => {
+        const closeBtn = notification.querySelector('.notification-close');
+        if (closeBtn) closeNotification(closeBtn);
+      });
+    });
   }
 
   const initialToken = checkAdminAuth()

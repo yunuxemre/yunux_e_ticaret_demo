@@ -141,10 +141,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                                 <a href="${productDetailUrl}" class="btn btn-outline-primary rounded-pill view-details-button">
                                     Detayları Gör <i class="fas fa-arrow-right ms-1"></i>
                                 </a>
-                                <a href="${product.trendyolLink || "https://www.trendyol.com/magaza/tansusahalsalamura-m-1013741?sst=0"}" 
-                                   target="_blank" class="btn btn-warning rounded-pill">
-                                    <i class="fas fa-shopping-cart me-1"></i>Trendyol'da Satın Al
-                                </a>
+                                <a href="${product.purchaseLink || "https://www.shopier.com/tansusahalsalamura?fbclid=PAZXh0bgNhZW0CMTEAAacBvI7-Wr0j9KJw2YfgFOzJRt3a4boCj5kG2sQEGjMuBBcGxDrqdz_lHng5ig_aem_-hd3SXrVz4kSBkCwAr40ag"}" 
+   target="_blank" 
+   class="btn rounded-pill"
+   style="background-color: #6B46C1; border-color: #6B46C1; color: white;">
+    <i class="fas fa-shopping-cart me-1"></i>Shopier'da Satın Al
+</a>
                             </div>
                         </div>
                     </div>
