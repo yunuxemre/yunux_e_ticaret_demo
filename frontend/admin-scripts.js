@@ -253,11 +253,9 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // --- END OF FILE admin-scripts.js ---
+// Video file selection triggers file input
 const selectVideoBtn = document.getElementById("selectVideoBtn");
 const videoFileInput = document.getElementById("videoFile");
-const videoPreview = document.getElementById("videoPreview");
-const videoSource = document.getElementById("videoSource");
-const removeVideoBtn = document.getElementById("removeVideoBtn");
 
 if (selectVideoBtn && videoFileInput) {
   selectVideoBtn.addEventListener("click", () => {
@@ -265,19 +263,40 @@ if (selectVideoBtn && videoFileInput) {
   });
 }
 
+// Clear YouTube link if video file is selected
 videoFileInput.addEventListener("change", () => {
   const file = videoFileInput.files[0];
   if (file) {
+    const youtubeLinkInput = document.getElementById("youtubeLink");
+    if (youtubeLinkInput && youtubeLinkInput.value) {
+      youtubeLinkInput.value = "";
+      alert("YouTube link cleared because a video file was selected.");
+    }
+    const videoPreview = document.getElementById("videoPreview");
+    const videoSource = document.getElementById("videoSource");
     videoSource.src = URL.createObjectURL(file);
     videoPreview.style.display = "block";
     videoPreview.querySelector("video").load();
   }
 });
 
-if (removeVideoBtn) {
-  removeVideoBtn.addEventListener("click", () => {
-    videoSource.src = "";
-    videoPreview.style.display = "none";
-    videoFileInput.value = "";
-  });
+// Show admin message on success or error
+function showAdminMessage(message, type) {
+  const adminMessageArea = document.getElementById("adminMessageArea");
+  if (!adminMessageArea) {
+    alert(`${type === "error" ? "ERROR: " : ""}${message}`);
+    return;
+  }
+  adminMessageArea.textContent = message;
+  adminMessageArea.style.display = "block";
+  adminMessageArea.style.backgroundColor = type === "error" ? "red" : "green";
+  adminMessageArea.style.color = "white";
+  adminMessageArea.style.padding = "10px";
+  adminMessageArea.style.position = "fixed";
+  adminMessageArea.style.top = "10px";
+  adminMessageArea.style.right = "10px";
+  adminMessageArea.style.zIndex = "1000";
+  setTimeout(() => {
+    adminMessageArea.style.display = "none";
+  }, 4000);
 }
