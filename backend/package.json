@@ -1,12 +1,9 @@
 {
-  "name": "tansu-sahal-salamura",
+  "name": "tansu-sahal-salamura-backend",
   "version": "1.0.0",
-  "description": "E-ticaret sitesi - Tansu Şahal Salamura",
-  "main": "backend/server.js",
   "scripts": {
-    "start": "node backend/server.js",
-    "dev": "nodemon backend/server.js",
-    "build": "echo 'Build completed'"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
@@ -22,9 +19,6 @@
     "express-mongo-sanitize": "^2.2.0",
     "xss-clean": "^0.1.4",
     "express-validator": "^7.0.1"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
   },
   "engines": {
     "node": ">=16.0.0"
