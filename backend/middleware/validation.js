@@ -1,5 +1,61 @@
 const { body, param, validationResult } = require("express-validator")
 
+const validateProduct = [
+  body("name").trim().isLength({ min: 2, max: 100 }).withMessage("Ürün adı 2-100 karakter arasında olmalıdır"),
+  body("description")
+    .trim()
+    .isLength({ min: 10, max: 1000 })
+    .withMessage("Açıklama 10-1000 karakter arasında olmalıdır"),
+  body("price").isFloat({ min: 0, max: 999999 }).withMessage("Fiyat 0-999999 arasında olmalıdır"),
+  body("stock").isInt({ min: 0, max: 99999 }).withMessage("Stok 0-99999 arasında olmalıdır"),
+  body("image").optional().isURL().withMessage("Geçerli bir resim URL'si giriniz"),
+
+  // ✅ Boş string'leri de kabul eden custom validation
+  body("videoUrl")
+    .optional()
+    .custom((value) => {
+      if (value === "" || value === null || value === undefined) {
+        return true // Boş değerleri kabul et
+      }
+      // Boş değilse URL validation yap
+      const urlRegex = /^https?:\/\/.+/
+      if (!urlRegex.test(value)) {
+        throw new Error("Geçerli bir video URL'si giriniz")
+      }
+      return true
+    }),
+
+  body("trendyolLink")
+    .optional()
+    .custom((value) => {
+      if (value === "" || value === null || value === undefined) {
+        return true // Boş değerleri kabul et
+      }
+      // Boş değilse URL validation yap
+      const urlRegex = /^https?:\/\/.+/
+      if (!urlRegex.test(value)) {
+        throw new Error("Geçerli bir Trendyol linki giriniz")
+      }
+      return true
+    }),
+
+  body("purchaseLink")
+    .optional()
+    .custom((value) => {
+      if (value === "" || value === null || value === undefined) {
+        return true // Boş değerleri kabul et
+      }
+      // Boş değilse URL validation yap
+      const urlRegex = /^https?:\/\/.+/
+      if (!urlRegex.test(value)) {
+        throw new Error("Geçerli bir satın alma linki giriniz")
+      }
+      return true
+    }),
+
+  body("category").optional().trim().isLength({ max: 50 }).withMessage("Kategori maksimum 50 karakter olabilir"),
+]
+
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
@@ -34,20 +90,6 @@ const validateUserRegistration = [
 const validateUserLogin = [
   body("email").isEmail().normalizeEmail().withMessage("Geçerli bir e-posta adresi giriniz"),
   body("password").notEmpty().withMessage("Şifre gereklidir"),
-]
-
-const validateProduct = [
-  body("name").trim().isLength({ min: 2, max: 100 }).withMessage("Ürün adı 2-100 karakter arasında olmalıdır"),
-  body("description")
-    .trim()
-    .isLength({ min: 10, max: 1000 })
-    .withMessage("Açıklama 10-1000 karakter arasında olmalıdır"),
-  body("price").isFloat({ min: 0, max: 999999 }).withMessage("Fiyat 0-999999 arasında olmalıdır"),
-  body("stock").isInt({ min: 0, max: 99999 }).withMessage("Stok 0-99999 arasında olmalıdır"),
-  body("image").optional().isURL().withMessage("Geçerli bir resim URL'si giriniz"),
-  body("videoUrl").optional().isURL().withMessage("Geçerli bir video URL'si giriniz"),
-  body("trendyolLink").optional().isURL().withMessage("Geçerli bir Trendyol linki giriniz"),
-  body("category").optional().trim().isLength({ max: 50 }).withMessage("Kategori maksimum 50 karakter olabilir"),
 ]
 
 const validateObjectId = [param("id").isMongoId().withMessage("Geçersiz ID formatı")]

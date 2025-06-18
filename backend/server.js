@@ -55,9 +55,10 @@ const port = process.env.PORT || 10000 // Render için 10000
 
 // CORS ayarları - Render için güncellenmiş
 const corsOptions = {
-  origin: process.env.NODE_ENV === "production"
-    ? true // Aynı domain'den gelen isteklere izin ver
-    : ["http://localhost:3000", "http://127.0.0.1:3000"],
+  origin:
+    process.env.NODE_ENV === "production"
+      ? true // Aynı domain'den gelen isteklere izin ver
+      : ["http://localhost:3000", "http://127.0.0.1:3000"],
   credentials: true,
   optionsSuccessStatus: 200,
 }
@@ -110,13 +111,13 @@ const videoUpload = multer({
 
 // Frontend static files - Render için düzeltilmiş
 const frontendPath = path.resolve(__dirname, "../frontend")
-console.log('Frontend path:', frontendPath)
+console.log("Frontend path:", frontendPath)
 
 if (fs.existsSync(frontendPath)) {
   app.use(express.static(frontendPath))
-  console.log('✅ Frontend klasörü bulundu ve serve ediliyor'.green)
+  console.log("✅ Frontend klasörü bulundu ve serve ediliyor".green)
 } else {
-  console.log('❌ Frontend klasörü bulunamadı:'.red, frontendPath)
+  console.log("❌ Frontend klasörü bulunamadı:".red, frontendPath)
 }
 
 // API Routes
@@ -160,8 +161,7 @@ app.get("/api/products/:id", validateObjectId, handleValidationErrors, async (re
     } else {
       res.status(404).json({ message: "Ürün bulunamadı." })
     }
-  } catch (error)
- {
+  } catch (error) {
     console.error(`GET /api/products/:id HATA: ${error.message}`.red)
     res.status(500).json({ message: "Sunucu: Ürün getirilemedi." })
   }
@@ -206,9 +206,15 @@ app.put(
         product.description = description || product.description
         product.image = image !== undefined ? (image.trim() === "" ? product.image : image.trim()) : product.image
         if (stock !== undefined) product.stock = Number(stock)
-        product.videoUrl = videoUrl !== undefined ? videoUrl.trim() : product.videoUrl
-        product.trendyolLink = trendyolLink !== undefined ? trendyolLink.trim() : product.trendyolLink
-        product.category = category !== undefined ? category.trim() : product.category
+        product.videoUrl = videoUrl !== undefined ? (videoUrl.trim() === "" ? "" : videoUrl.trim()) : product.videoUrl
+        product.trendyolLink =
+          trendyolLink !== undefined ? (trendyolLink.trim() === "" ? "" : trendyolLink.trim()) : product.trendyolLink
+        product.purchaseLink =
+          req.body.purchaseLink !== undefined
+            ? req.body.purchaseLink.trim() === ""
+              ? ""
+              : req.body.purchaseLink.trim()
+            : product.purchaseLink
 
         const updatedProduct = await product.save()
         res.json(updatedProduct)
@@ -238,50 +244,50 @@ app.delete("/api/admin/products/:id", protect, admin, validateObjectId, handleVa
 })
 
 // Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
+app.get("/health", (req, res) => {
+  res.json({
+    status: "OK",
     uptime: process.uptime(),
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV
-  });
-});
+    environment: process.env.NODE_ENV,
+  })
+})
 
 // Ana sayfa route - Frontend index.html serve et
-app.get('/', (req, res) => {
-  const indexPath = path.join(frontendPath, 'index.html')
-  
+app.get("/", (req, res) => {
+  const indexPath = path.join(frontendPath, "index.html")
+
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath)
   } else {
     res.json({
-      message: 'Tansu Şahal Salamura Backend API çalışıyor! 🥒',
-      version: '1.0.0',
-      status: 'OK',
+      message: "Tansu Şahal Salamura Backend API çalışıyor! 🥒",
+      version: "1.0.0",
+      status: "OK",
       endpoints: {
-        products: '/api/products',
-        users: '/api/users/login',
-        admin: '/api/admin/products',
-        health: '/health'
+        products: "/api/products",
+        users: "/api/users/login",
+        admin: "/api/admin/products",
+        health: "/health",
       },
       frontendPath: frontendPath,
-      indexExists: fs.existsSync(indexPath)
+      indexExists: fs.existsSync(indexPath),
     })
   }
-});
+})
 
 // Catch-all route for SPA
-app.get('*', (req, res) => {
+app.get("*", (req, res) => {
   // API route'ları için 404
-  if (req.path.startsWith('/api')) {
-    return res.status(404).json({ 
-      message: 'API endpoint bulunamadı',
-      path: req.path 
-    });
+  if (req.path.startsWith("/api")) {
+    return res.status(404).json({
+      message: "API endpoint bulunamadı",
+      path: req.path,
+    })
   }
-  
+
   // Frontend için index.html serve et
-  const indexPath = path.join(frontendPath, 'index.html')
+  const indexPath = path.join(frontendPath, "index.html")
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath)
   } else {
@@ -311,7 +317,7 @@ app.get('*', (req, res) => {
       </html>
     `)
   }
-});
+})
 
 // Error handler
 app.use((error, req, res, next) => {
@@ -329,11 +335,11 @@ app.use((error, req, res, next) => {
 })
 
 // Server başlat
-app.listen(port, '0.0.0.0', () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`🚀 Sunucu http://localhost:${port} adresinde çalışıyor`.yellow)
-  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`.blue)
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`.blue)
   console.log("🔒 Güvenlik Önlemleri Aktif".green.bold)
-  
+
   // Environment variables kontrol
   if (!process.env.JWT_SECRET) {
     console.warn("⚠️  UYARI: JWT_SECRET .env'de eksik!".red.bold)
