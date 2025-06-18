@@ -255,6 +255,9 @@ document.addEventListener("DOMContentLoaded", () => {
 // --- END OF FILE admin-scripts.js ---
 const selectVideoBtn = document.getElementById("selectVideoBtn");
 const videoFileInput = document.getElementById("videoFile");
+const videoPreview = document.getElementById("videoPreview");
+const videoSource = document.getElementById("videoSource");
+const removeVideoBtn = document.getElementById("removeVideoBtn");
 
 if (selectVideoBtn && videoFileInput) {
   selectVideoBtn.addEventListener("click", () => {
@@ -265,10 +268,16 @@ if (selectVideoBtn && videoFileInput) {
 videoFileInput.addEventListener("change", () => {
   const file = videoFileInput.files[0];
   if (file) {
-    const videoPreview = document.getElementById("videoPreview");
-    const videoSource = document.getElementById("videoSource");
     videoSource.src = URL.createObjectURL(file);
     videoPreview.style.display = "block";
     videoPreview.querySelector("video").load();
   }
 });
+
+if (removeVideoBtn) {
+  removeVideoBtn.addEventListener("click", () => {
+    videoSource.src = "";
+    videoPreview.style.display = "none";
+    videoFileInput.value = "";
+  });
+}
