@@ -280,7 +280,7 @@ videoFileInput.addEventListener("change", () => {
   }
 });
 
-// Show admin message on success or error
+// Show admin message 
 function showAdminMessage(message, type) {
   const adminMessageArea = document.getElementById("adminMessageArea");
   if (!adminMessageArea) {
