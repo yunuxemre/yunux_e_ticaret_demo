@@ -10,19 +10,39 @@ const validateProduct = [
   body("stock").isInt({ min: 0, max: 99999 }).withMessage("Stok 0-99999 arasında olmalıdır"),
   body("image").optional().isURL().withMessage("Geçerli bir resim URL'si giriniz"),
 
-  // ✅ Boş string'leri de kabul eden custom validation
+  // ✅ DÜZELTİLMİŞ Video URL validation
   body("videoUrl")
     .optional()
     .custom((value) => {
-      if (value === "" || value === null || value === undefined) {
-        return true // Boş değerleri kabul et
+      // Boş değerleri kabul et
+      if (!value || value.trim() === "") {
+        return true
       }
-      // Boş değilse URL validation yap
+
+      const trimmedValue = value.trim()
+
+      // Yüklenen video dosyası kontrolü (/videos/ ile başlayan)
+      if (trimmedValue.startsWith("/videos/")) {
+        return true
+      }
+
+      // YouTube URL kontrolü (hem normal hem embed)
+      if (
+        trimmedValue.includes("youtube.com") ||
+        trimmedValue.includes("youtu.be") ||
+        trimmedValue.includes("youtube.com/embed/")
+      ) {
+        return true
+      }
+
+      // Diğer HTTP/HTTPS URL kontrolü
       const urlRegex = /^https?:\/\/.+/
-      if (!urlRegex.test(value)) {
-        throw new Error("Geçerli bir video URL'si giriniz")
+      if (urlRegex.test(trimmedValue)) {
+        return true
       }
-      return true
+
+      // Hiçbiri değilse hata
+      throw new Error("Geçerli bir video URL'si giriniz (YouTube linki veya yüklenen video dosyası)")
     }),
 
   body("trendyolLink")

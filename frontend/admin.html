@@ -274,24 +274,24 @@
 
       <section id="addProductSection" class="card card-body shadow-sm mb-4 p-4">
           <h3 class="mb-4 border-bottom pb-3">Yeni Ürün Ekle / Düzenle</h3>
-          <form id="productForm">
+          <form id="productForm" novalidate>
               <input type="hidden" id="productId" name="id">
               <div class="form-group mb-3">
                   <label for="name" class="form-label">Ürün Adı:</label>
-                  <input type="text" class="form-control form-control-lg" id="name" name="name" required>
+                  <input type="text" class="form-control form-control-lg" id="name" name="name">
               </div>
               <div class="form-group mb-3">
                   <label for="description" class="form-label">Açıklama:</label>
-                  <textarea class="form-control form-control-lg" id="description" name="description" rows="4" required></textarea>
+                  <textarea class="form-control form-control-lg" id="description" name="description" rows="4"></textarea>
               </div>
               <div class="row g-3">
                   <div class="col-md-6 form-group mb-3">
                       <label for="price" class="form-label">Fiyat (TL):</label>
-                      <input type="number" class="form-control form-control-lg" id="price" name="price" step="0.01" min="0" required>
+                      <input type="number" class="form-control form-control-lg" id="price" name="price" step="0.01" min="0">
                   </div>
                   <div class="col-md-6 form-group mb-3">
                       <label for="stock" class="form-label">Stok Adedi:</label>
-                      <input type="number" class="form-control form-control-lg" id="stock" name="stock" min="0" required>
+                      <input type="number" class="form-control form-control-lg" id="stock" name="stock" min="0">
                   </div>
               </div>
               <div class="form-group mb-3">
@@ -355,7 +355,7 @@
                               <!-- Video Preview -->
                               <div id="videoPreview" style="display: none;">
                                   <video class="video-preview" controls>
-                                      <source id="videoSource" src="/placeholder.svg" type="video/mp4">
+                                      <source id="videoSource" src="" type="video/mp4">
                                       Tarayıcınız video oynatmayı desteklemiyor.
                                   </video>
                                   <div class="mt-2">
