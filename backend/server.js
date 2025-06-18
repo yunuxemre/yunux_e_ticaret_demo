@@ -1,3 +1,5 @@
+// --- START OF FILE server.js ---
+
 require("dotenv").config()
 const colors = require("colors")
 const connectDB = require("./config/db")
@@ -158,7 +160,8 @@ app.get("/api/products/:id", validateObjectId, handleValidationErrors, async (re
     } else {
       res.status(404).json({ message: "Ürün bulunamadı." })
     }
-  } catch (error) {
+  } catch (error)
+ {
     console.error(`GET /api/products/:id HATA: ${error.message}`.red)
     res.status(500).json({ message: "Sunucu: Ürün getirilemedi." })
   }
@@ -170,7 +173,7 @@ app.post("/api/admin/products", protect, admin, validateProduct, handleValidatio
 
     const product = new Product({
       name,
-      price: Math.round(Number(price) * 100),
+      price: Math.round(Number(price) * 100), // ✅ DOĞRU MANTIK: Fiyat burada TL olarak alınıp kuruşa çevriliyor.
       description,
       image: image || "/images/default-product.png",
       stock: Number(stock),
@@ -199,7 +202,7 @@ app.put(
       const product = await Product.findById(req.params.id)
       if (product) {
         product.name = name || product.name
-        if (price !== undefined) product.price = Math.round(Number(price) * 100)
+        if (price !== undefined) product.price = Math.round(Number(price) * 100) // ✅ DOĞRU MANTIK: Fiyat burada TL olarak alınıp kuruşa çevriliyor.
         product.description = description || product.description
         product.image = image !== undefined ? (image.trim() === "" ? product.image : image.trim()) : product.image
         if (stock !== undefined) product.stock = Number(stock)
@@ -342,3 +345,5 @@ app.listen(port, '0.0.0.0', () => {
     console.warn("⚠️  UYARI: MONGODB_URI .env'de eksik!".red.bold)
   }
 })
+
+// --- END OF FILE server.js ---

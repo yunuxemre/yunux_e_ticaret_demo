@@ -1,3 +1,5 @@
+// --- START OF FILE admin-scripts.js ---
+
 document.addEventListener("DOMContentLoaded", () => {
   // --- ELEMENT SEÇİCİLER VE SABİTLER ---
   const productForm = document.getElementById("productForm");
@@ -8,31 +10,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const stockInput = document.getElementById("stock");
   const imageInput = document.getElementById("image");
   const videoUrlInput = document.getElementById("videoUrl");
+  const purchaseLinkInput = document.getElementById("purchaseLink");
   const clearFormButton = document.getElementById("clearFormButton");
   const productListBody = document.getElementById("productListBody");
   const adminMessageArea = document.getElementById("adminMessageArea");
   
-  // Video Yükleme Elemanları
-  const videoUploadArea = document.getElementById("videoUploadArea");
-  const videoFile = document.getElementById("videoFile");
-  const selectVideoBtn = document.getElementById("selectVideoBtn");
-  const uploadProgress = document.getElementById("uploadProgress");
-  const videoPreview = document.getElementById("videoPreview");
-  const videoSource = document.getElementById("videoSource");
-  const removeVideoBtn = document.getElementById("removeVideoBtn");
-
-  let currentVideoUrl = "";
-
-  // API Adresleri
   const API_URL_ADMIN = "/api/admin/products";
   const API_URL_PRODUCTS = "/api/products";
-  const API_URL_VIDEO_UPLOAD = "/api/admin/upload-video";
 
   // --- YARDIMCI FONKSİYONLAR ---
 
   const getUserInfo = () => {
-    const userInfoString = localStorage.getItem("userInfo");
     try {
+      const userInfoString = localStorage.getItem("userInfo");
       return userInfoString ? JSON.parse(userInfoString) : null;
     } catch (e) {
       localStorage.removeItem("userInfo");
@@ -42,12 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const checkAdminAuth = () => {
     const userInfo = getUserInfo();
-    if (!userInfo || !userInfo.token) {
-      showAdminMessage("Bu işlem için giriş yapmanız gerekmektedir.", "error");
-      return null;
-    }
-    if (userInfo.role !== "admin") {
-      showAdminMessage("Bu sayfaya veya işleme erişim yetkiniz yok.", "error");
+    if (!userInfo || !userInfo.token || userInfo.role !== "admin") {
+      showAdminMessage("Bu sayfaya erişim yetkiniz yok veya giriş yapmanız gerekiyor.", "error");
       return null;
     }
     return userInfo.token;
@@ -69,81 +55,57 @@ document.addEventListener("DOMContentLoaded", () => {
   const clearForm = () => {
     if (productForm) productForm.reset();
     if (productIdInput) productIdInput.value = "";
-    if (productForm) productForm.querySelector('button[type="submit"]').textContent = "Kaydet / Güncelle";
-    
-    currentVideoUrl = "";
-    if (videoPreview) videoPreview.style.display = "none";
-    if (videoSource) videoSource.src = "";
-    if (uploadProgress) uploadProgress.style.display = "none";
-    if (videoFile) videoFile.value = "";
+    const submitButton = productForm?.querySelector('button[type="submit"]');
+    if (submitButton) submitButton.textContent = "Kaydet / Güncelle";
   };
-
-  // --- FORM VE UI EVENTLERİ ---
-
+  
   if (clearFormButton) {
     clearFormButton.addEventListener("click", clearForm);
   }
-  
-  if (selectVideoBtn && videoFile) {
-    selectVideoBtn.addEventListener("click", () => videoFile.click());
-  }
 
-  if (videoUploadArea) {
-    ["dragover", "dragleave", "drop"].forEach(eventName => videoUploadArea.addEventListener(eventName, e => e.preventDefault()));
-    videoUploadArea.addEventListener("dragover", () => videoUploadArea.classList.add("dragover"));
-    videoUploadArea.addEventListener("dragleave", () => videoUploadArea.classList.remove("dragover"));
-    videoUploadArea.addEventListener("drop", (e) => {
-      videoUploadArea.classList.remove("dragover");
-      const files = e.dataTransfer.files;
-      if (files.length > 0 && files[0].type.startsWith("video/")) {
-        handleVideoFile(files[0]);
-      } else {
-        showAdminMessage("Lütfen geçerli bir video dosyası seçin.", "error");
-      }
-    });
-  }
-
-  if (videoFile) {
-    videoFile.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (file) handleVideoFile(file);
-    });
-  }
-
-  if (removeVideoBtn) {
-    removeVideoBtn.addEventListener("click", () => {
-      currentVideoUrl = "";
-      if (videoPreview) videoPreview.style.display = "none";
-      if (videoSource) videoSource.src = "";
-      if (videoFile) videoFile.value = "";
-      showAdminMessage("Yüklenen video kaldırıldı.", "success");
-    });
-  }
-  
-  // --- API İLE İLGİLİ FONKSİYONLAR ---
-
-  const handleVideoFile = async (file) => {
-    if (file.size > 100 * 1024 * 1024) {
-      showAdminMessage("Video dosyası 100MB'dan büyük olamaz.", "error");
-      return;
+  const convertYoutubeLink = (url) => {
+    if (!url) return "";
+    let videoId = null;
+    if (url.includes("youtube.com/watch?v=")) {
+      videoId = url.split("v=")[1].split('&')[0];
+    } 
+    else if (url.includes("youtu.be/")) {
+      videoId = url.split("youtu.be/")[1].split('?')[0];
     }
-    const token = checkAdminAuth();
-    if (!token) return;
-    // ... (Video yükleme kodunuzun geri kalanı burada)
+    else if (url.includes("youtube.com/embed/")) {
+      videoId = url.split("/embed/")[1].split('?')[0];
+    }
+    if (videoId) {
+      return `https://www.youtube.com/embed/${videoId}`;
+    }
+    return url;
   };
+  
+  if (videoUrlInput) {
+    videoUrlInput.addEventListener('input', (e) => {
+      setTimeout(() => {
+        const currentUrl = e.target.value;
+        if (currentUrl.includes("youtube") || currentUrl.includes("youtu.be")) {
+          const embedUrl = convertYoutubeLink(currentUrl);
+          if (embedUrl !== currentUrl) {
+            e.target.value = embedUrl;
+            showAdminMessage("YouTube linki embed formatına çevrildi.", "success");
+          }
+        }
+      }, 500);
+    });
+  }
+
+  // --- API İLE İLGİLİ FONKSİYONLAR ---
 
   const fetchProducts = async () => {
     try {
       const response = await fetch(API_URL_PRODUCTS);
-      if (!response.ok) {
-        const errData = await response.json().catch(() => ({ message: `Sunucu hatası (${response.status})` }));
-        throw new Error(errData.message);
-      }
+      if (!response.ok) throw new Error(`Ürünler yüklenemedi (${response.status})`);
       const products = await response.json();
       renderProducts(products);
     } catch (error) {
-      if (productListBody)
-        productListBody.innerHTML = `<tr><td colspan="6" class="text-center">Ürünler yüklenirken bir hata oluştu: ${error.message}</td></tr>`;
+      if (productListBody) productListBody.innerHTML = `<tr><td colspan="6" class="text-center">Ürünler yüklenirken bir hata oluştu: ${error.message}</td></tr>`;
     }
   };
 
@@ -155,12 +117,12 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     products.forEach((product) => {
-      // ... (renderProducts kodunuzun geri kalanı burada)
+      const displayPrice = (product.price / 100).toFixed(2);
       const row = `
         <tr>
           <td><img src="${product.image || 'https://via.placeholder.com/60'}" alt="${product.name}" width="60" class="img-thumbnail"></td>
           <td>${product.name}</td>
-          <td class="text-end">${(product.price / 100).toFixed(2)} TL</td>
+          <td class="text-end">${displayPrice} TL</td>
           <td class="text-center">${product.stock}</td>
           <td class="text-center">${product.videoUrl ? '<i class="fas fa-video text-success"></i>' : '<i class="fas fa-video-slash text-muted"></i>'}</td>
           <td class="text-center actions">
@@ -181,56 +143,39 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!token) return;
 
       const id = productIdInput.value;
-
-      let finalVideoUrl = "";
-      if (currentVideoUrl) {
-        finalVideoUrl = currentVideoUrl;
-      } else if (videoUrlInput && videoUrlInput.value.trim()) {
-        finalVideoUrl = videoUrlInput.value.trim();
-      }
-
-      const priceAsFloat = parseFloat(priceInput.value);
+      
+      const priceAsFloat = parseFloat(priceInput.value.replace(',', '.'));
       if (isNaN(priceAsFloat) || priceAsFloat < 0) {
         showAdminMessage("Lütfen geçerli ve pozitif bir fiyat girin.", "error");
         return;
       }
-      const priceInCents = Math.round(priceAsFloat * 100);
-
-      // --- ANA DÜZELTME BURADA ---
-      const trendyolLinkValue = document.getElementById("trendyolLink")?.value?.trim();
+      
+      const purchaseLinkValue = purchaseLinkInput ? purchaseLinkInput.value.trim() : "";
+      const finalVideoUrl = convertYoutubeLink(videoUrlInput.value.trim());
 
       const productData = {
         name: nameInput.value,
         description: descriptionInput.value,
-        price: priceInCents,
+        price: priceAsFloat,
         stock: Number.parseInt(stockInput.value),
         image: imageInput.value.trim() || undefined,
         videoUrl: finalVideoUrl,
-        category: document.getElementById("category")?.value?.trim() || "",
-        // Sadece trendyolLink doluysa nesneye ekle, boşsa hiç gönderme
-        ...(trendyolLinkValue && { trendyolLink: trendyolLinkValue })
+        category: document.getElementById("category").value.trim() || "",
+        ...(purchaseLinkValue && { purchaseLink: purchaseLinkValue })
       };
 
       const method = id ? "PUT" : "POST";
       const url = id ? `${API_URL_ADMIN}/${id}` : API_URL_ADMIN;
-
       try {
         const response = await fetch(url, {
-          method: method,
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-          },
+          method,
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
           body: JSON.stringify(productData),
         });
-        
         if (!response.ok) {
-          const responseData = await response.json().catch(() => ({ message: `Sunucuya ulaşılamadı veya yanıt alınamadı. (Kod: ${response.status})` }));
-          // Hata mesajını responseData.errors'dan almayı dene
-          const errorMessage = responseData.errors ? `${responseData.message}: ${responseData.errors[0].message}` : responseData.message;
-          throw new Error(errorMessage);
+          const errData = await response.json().catch(() => ({message: "Bilinmeyen bir sunucu hatası"}));
+          throw new Error(errData.message);
         }
-
         showAdminMessage(id ? "Ürün başarıyla güncellendi!" : "Ürün başarıyla eklendi!", "success");
         clearForm();
         fetchProducts();
@@ -244,22 +189,60 @@ document.addEventListener("DOMContentLoaded", () => {
     productListBody.addEventListener("click", async (e) => {
       const button = e.target.closest("button");
       if (!button) return;
-
+      
       const token = checkAdminAuth();
       if (!token) return;
-
-      const currentProductId = button.dataset.id;
       
-      // ... (Silme ve düzenleme kodlarınızın geri kalanı burada, onlar doğru çalışıyor)
+      const currentProductId = button.dataset.id;
+      if (!currentProductId) return;
+      
       if (button.classList.contains("delete-product")) {
-        // ...
-      } else if (button.classList.contains("edit-product")) {
-        // ...
+        if (confirm("Bu ürünü silmek istediğinizden emin misiniz?")) {
+          try {
+            const response = await fetch(`${API_URL_ADMIN}/${currentProductId}`, {
+              method: "DELETE",
+              headers: { "Authorization": `Bearer ${token}` },
+            });
+            if (!response.ok) {
+              const errorData = await response.json().catch(() => ({ message: "Silme işlemi başarısız." }));
+              throw new Error(errorData.message);
+            }
+            showAdminMessage("Ürün başarıyla silindi!", "success");
+            fetchProducts();
+          } catch (error) {
+            showAdminMessage(`Hata: ${error.message}`, "error");
+          }
+        }
+      } 
+      else if (button.classList.contains("edit-product")) {
+        try {
+          const response = await fetch(`${API_URL_PRODUCTS}/${currentProductId}`);
+          if (!response.ok) throw new Error("Ürün bilgileri alınamadı.");
+          const product = await response.json();
+          
+          clearForm();
+          productIdInput.value = product._id;
+          nameInput.value = product.name;
+          descriptionInput.value = product.description;
+          priceInput.value = (product.price / 100).toFixed(2);
+          stockInput.value = product.stock;
+          imageInput.value = product.image || "";
+          if (purchaseLinkInput) purchaseLinkInput.value = product.purchaseLink || "";
+          document.getElementById("category").value = product.category || "";
+          videoUrlInput.value = product.videoUrl || "";
+          
+          productForm.querySelector('button[type="submit"]').textContent = "Güncelle";
+          
+          // ✅ OTOMATİK KAYDIRMA: Düzenleme formuna git
+          document.getElementById("addProductSection").scrollIntoView({ behavior: "smooth" });
+
+        } catch (error) {
+          showAdminMessage(`Hata: ${error.message}`, "error");
+        }
       }
     });
   }
 
-  // --- SAYFA YÜKLENDİĞİNDE ÇALIŞACAK KODLAR ---
   const initialToken = checkAdminAuth();
   if (initialToken) {
     fetchProducts();
@@ -268,3 +251,5 @@ document.addEventListener("DOMContentLoaded", () => {
     if (productListBody) productListBody.innerHTML = `<tr><td colspan="6" class="text-center">İçeriği görmek için admin olarak giriş yapmalısınız.</td></tr>`;
   }
 });
+
+// --- END OF FILE admin-scripts.js ---
