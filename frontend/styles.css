@@ -35,9 +35,9 @@ body {
 
 .veggie {
   position: absolute;
-  font-size: 5rem;
-  animation: float 6s ease-in-out infinite;
-  opacity: 1;
+  font-size: 7rem;
+  animation: float 7s ease-in-out infinite;
+  opacity: 0.7;
 }
 
 .veggie:nth-child(1) {
@@ -229,9 +229,9 @@ section.container {
 .hero-section {
   background: linear-gradient(
       135deg,
-      rgba(34, 139, 34, 0.4) 0%,
+      rgba(22, 87, 22, 0.4) 0%,
       rgba(46, 139, 87, 0.3) 50%,
-      rgba(50, 205, 50, 0.4) 100%
+      rgba(34, 119, 34, 0.4) 100%
     ),
     url("https://images4.alphacoders.com/766/766523.jpg");
   background-size: cover;
@@ -263,7 +263,7 @@ section.container {
 }
 
 .hero-section .hero-title {
-  font-size: 3.8rem;
+  font-size: 4rem;
   text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.7);
   animation: heroGlow 4s ease-in-out infinite alternate;
   font-weight: 800;
@@ -279,8 +279,8 @@ section.container {
 }
 
 .hero-section .hero-subtitle {
-  font-size: 1.4rem;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+  font-size: 1.7rem;
+  text-shadow: 3px 3px 9px rgba(0, 0, 0, 0.6);
   color: rgba(255, 255, 255, 0.95) !important;
   font-weight: 500;
   margin-bottom: 2rem;
@@ -1167,5 +1167,11 @@ main {
 
   .auth-container h2 {
     font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .navbar-nav.ms-auto {
+    margin-left: auto;
   }
 }

@@ -53,7 +53,7 @@
         }
 
         .navbar-brand::before {
-          content: "🥒 ";
+          content: "";
           font-size: 1.2em;
         }
 
@@ -180,30 +180,25 @@
 
         .veggie {
             position: absolute;
-            font-size: 5rem;
-            opacity: 1;
-            animation: float 6s ease-in-out infinite;
+            font-size: 7rem;
+            opacity: 0.7;
+            animation: float 7s ease-in-out infinite;
         }
 
         .veggie:nth-child(1) { left: 5%; animation-delay: 0s; }
-        .veggie:nth-child(2) { left: 15%; animation-delay: 1s; }
-        .veggie:nth-child(3) { left: 25%; animation-delay: 2s; }
+        .veggie:nth-child(2) { left: 10%; animation-delay: 1s; }
+        .veggie:nth-child(3) { left: 20%; animation-delay: 2s; }
         .veggie:nth-child(4) { left: 35%; animation-delay: 3s; }
         .veggie:nth-child(5) { left: 45%; animation-delay: 4s; }
         .veggie:nth-child(6) { left: 55%; animation-delay: 1s; }
-        .veggie:nth-child(7) { left: 65%; animation-delay: 3s; }
-        .veggie:nth-child(8) { left: 75%; animation-delay: 5s; }
+        .veggie:nth-child(7) { left: 85%; animation-delay: 3s; }
+        .veggie:nth-child(8) { left: 95%; animation-delay: 5s; }
 
         @keyframes float {
             0%, 100% { transform: translateY(100vh) rotate(0deg); }
             50% { transform: translateY(-100px) rotate(180deg); }
         }
 
-        /* JS tarafından gösterilecek linkler için varsayılan gizleme (from original product-detail, kept for clarity if needed by JS) */
-        /* #logoutLink, #adminLink {
-            display: none !important; /* JS bunu !important ile inline olarak değiştirecek */
-        /* } */
-        /* This is now handled by inline styles in HTML for initial state */
 
         /* Main Content */
         main.container { /* main'e container class'ı eklendiği varsayılarak */
@@ -938,11 +933,11 @@
 
     <!-- Floating vegetables background -->
     <div class="floating-veggies">
-        <div class="veggie">🥒</div> <div class="veggie">🌿</div>
-        <div class="veggie">🥬</div> <div class="veggie">🥒</div>
-        <div class="veggie">🥦</div> <div class="veggie">🥬</div>
+        <div class="veggie">🥬</div> <div class="veggie">🌿</div>
+        <div class="veggie">🥦</div> <div class="veggie">🥒</div>
+        <div class="veggie">🥒</div> <div class="veggie">🥬</div>
         <div class="veggie">🌿</div> <div class="veggie">🥦</div>
-        <div class="veggie">🥒</div> <div class="veggie">🌿</div>
+        <div class="veggie">🥬</div> <div class="veggie">🌿</div>
     </div>
 
     <!-- Navbar -->
