@@ -1175,3 +1175,38 @@ main {
     margin-left: auto;
   }
 }
+
+@media (max-width: 991.98px) {
+  .main-navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .navbar-toggler {
+    margin-left: auto;
+  }
+
+  .navbar-user-info {
+    flex-direction: column !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .auth-links-group {
+    flex-direction: column !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .auth-link,
+  #adminLink,
+  .btn-outline-danger {
+    width: auto !important;
+    max-width: none !important;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+  }
+}
