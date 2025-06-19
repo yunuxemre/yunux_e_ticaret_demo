@@ -1,42 +1,153 @@
-/* frontend/styles.css */
+/* frontend/styles-green.css - Complete Green Theme */
+
+/* CSS Variables for Green Theme */
+:root {
+  --primary-green: #228b22;
+  --secondary-green: #2e8b57;
+  --light-green: #90ee90;
+  --dark-green: #2d5016;
+  --accent-green: #32cd32;
+  --bg-green: #f0fff0;
+}
 
 /* Google Font (Poppins) */
 body {
   font-family: "Poppins", sans-serif;
-  background-color: #f8f9fa;
+  background: linear-gradient(135deg, var(--bg-green) 0%, #e6ffe6 100%);
   color: #212529;
   line-height: 1.6;
-  display: flex; /* Footer'ı en alta itmek için */
-  flex-direction: column; /* Footer'ı en alta itmek için */
-  min-height: 100vh; /* Footer'ı en alta itmek için */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Floating vegetables background */
+.floating-veggies {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.veggie {
+  position: absolute;
+  font-size: 5rem;
+  animation: float 6s ease-in-out infinite;
+  opacity: 1;
+}
+
+.veggie:nth-child(1) {
+  left: 5%;
+  animation-delay: 0s;
+}
+.veggie:nth-child(2) {
+  left: 15%;
+  animation-delay: 1s;
+}
+.veggie:nth-child(3) {
+  left: 25%;
+  animation-delay: 2s;
+}
+.veggie:nth-child(4) {
+  left: 35%;
+  animation-delay: 3s;
+}
+.veggie:nth-child(5) {
+  left: 45%;
+  animation-delay: 4s;
+}
+.veggie:nth-child(6) {
+  left: 55%;
+  animation-delay: 1s;
+}
+.veggie:nth-child(7) {
+  left: 65%;
+  animation-delay: 3s;
+}
+.veggie:nth-child(8) {
+  left: 75%;
+  animation-delay: 5s;
+}
+.veggie:nth-child(9) {
+  left: 85%;
+  animation-delay: 7s;
+}
+.veggie:nth-child(10) {
+  left: 95%;
+  animation-delay: 9s;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(100vh) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-100px) rotate(180deg);
+  }
 }
 
 main.container,
 section.container {
-  /* Ana içerik alanları için */
-  flex-grow: 1; /* Footer'ı en alta itmek için */
+  flex-grow: 1;
+  position: relative;
+  z-index: 2;
 }
 
-/* Navbar */
+/* Navbar - Green Theme */
 .navbar-light.bg-white {
-  border-bottom: 1px solid #e9ecef;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(15px);
+  border-bottom: 2px solid var(--light-green);
+  z-index: 1000;
 }
+
 .navbar-brand {
   letter-spacing: 0.5px;
-  color: #1a2533 !important;
+  color: var(--primary-green) !important;
   font-size: 1.25rem;
   font-weight: 700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
+
+.navbar-brand::before {
+  content: "🥒 ";
+  font-size: 1.2em;
+}
+
 .nav-link {
   font-weight: 500;
-  color: #495057 !important;
-  transition: color 0.2s ease;
+  color: var(--dark-green) !important;
+  transition: all 0.3s ease;
   margin: 0 0.5rem;
   padding: 0.5rem 0.75rem !important;
+  position: relative;
 }
+
 .nav-link:hover,
 .nav-link.active {
-  color: #0d6efd !important;
+  color: var(--primary-green) !important;
+  transform: translateY(-2px);
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 50%;
+  background: var(--accent-green);
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+  left: 0;
 }
 
 /* Navbar User Info - Desktop */
@@ -49,7 +160,7 @@ section.container {
 .navbar-user-greeting {
   white-space: nowrap;
   font-size: 0.85rem;
-  color: #0d6efd !important;
+  color: var(--primary-green) !important;
   font-weight: 600;
   max-width: 120px;
   overflow: hidden;
@@ -68,35 +179,44 @@ section.container {
   white-space: nowrap;
   padding: 0.35rem 0.6rem;
   border-radius: 0.375rem;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   text-decoration: none !important;
+  color: var(--primary-green) !important;
 }
 
 .auth-link:hover {
-  background-color: #f8f9fa;
-  color: #0d6efd !important;
+  background-color: var(--light-green);
+  color: var(--dark-green) !important;
+  transform: translateY(-2px);
 }
 
-/* Admin butonu özel stil - normal link gibi */
+/* Admin butonu özel stil */
 #adminLink {
   background: none !important;
   border: none !important;
-  color: #495057 !important;
+  color: var(--primary-green) !important;
   font-size: 0.85rem;
   padding: 0.35rem 0.6rem;
   font-weight: 500;
 }
 
 #adminLink:hover {
-  background-color: #f8f9fa !important;
-  color: #0d6efd !important;
+  background-color: var(--light-green) !important;
+  color: var(--dark-green) !important;
 }
 
-/* Favoriler butonu */
+/* Favoriler butonu - Green Theme */
 .btn-outline-danger {
   font-size: 0.85rem;
   padding: 0.4rem 0.8rem;
   white-space: nowrap;
+  border-color: var(--primary-green);
+  color: var(--primary-green);
+}
+
+.btn-outline-danger:hover {
+  background-color: var(--primary-green);
+  border-color: var(--primary-green);
 }
 
 .btn-outline-danger .badge {
@@ -105,99 +225,173 @@ section.container {
   line-height: 1;
 }
 
-/* Hero Section */
+/* Hero Section - Green Theme with Background Image */
 .hero-section {
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)),
+  background: linear-gradient(
+      135deg,
+      rgba(34, 139, 34, 0.4) 0%,
+      rgba(46, 139, 87, 0.3) 50%,
+      rgba(50, 205, 50, 0.4) 100%
+    ),
     url("https://images4.alphacoders.com/766/766523.jpg");
   background-size: cover;
-  background-position: center 70%;
-  background-repeat: no-repeat;
-  min-height: 75vh;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
   color: #ffffff;
   display: flex;
   align-items: center;
-}
-.hero-section .hero-title {
-  font-size: 3.5rem;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-}
-.hero-section .hero-subtitle {
-  font-size: 1.25rem;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
-  color: rgba(255, 255, 255, 0.85) !important;
-}
-.hero-section .hero-button {
-  font-weight: 600;
-  font-size: 1.1rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.hero-section .hero-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+  z-index: 2;
 }
 
-/* Section Başlıkları */
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.hero-section .container {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-section .hero-title {
+  font-size: 3.8rem;
+  text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.7);
+  animation: heroGlow 4s ease-in-out infinite alternate;
+  font-weight: 800;
+}
+
+@keyframes heroGlow {
+  0% {
+    text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.7);
+  }
+  100% {
+    text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 255, 255, 0.4);
+  }
+}
+
+.hero-section .hero-subtitle {
+  font-size: 1.4rem;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+  color: rgba(255, 255, 255, 0.95) !important;
+  font-weight: 500;
+  margin-bottom: 2rem;
+}
+
+.hero-section .hero-button {
+  font-weight: 700;
+  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--primary-green);
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s ease;
+  position: relative;
+  z-index: 3;
+  backdrop-filter: blur(10px);
+}
+
+.hero-section .hero-button:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  background: var(--light-green);
+  color: var(--dark-green);
+  border-color: var(--light-green);
+}
+
+/* Section Başlıkları - Green Theme */
 .section-title {
-  color: #343a40;
+  color: var(--dark-green);
   position: relative;
   padding-bottom: 15px;
   margin-bottom: 40px !important;
+  font-weight: 600;
 }
+
 .section-title::after {
   content: "";
   position: absolute;
   display: block;
   width: 60px;
   height: 3px;
-  background: #0d6efd;
+  background: var(--accent-green);
   bottom: 0;
   left: calc(50% - 30px);
 }
 
-/* Ürün Kartları */
+/* Ürün Kartları - Green Theme */
 .product-card {
   transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
-  border: none;
+  border: 2px solid var(--light-green);
   border-radius: 0.75rem;
   overflow: hidden;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
 }
+
 .product-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 15px 35px rgba(34, 139, 34, 0.2) !important;
+  border-color: var(--accent-green);
 }
+
 .product-card .card-img-top {
   border-bottom: 1px solid #f0f0f0;
   transition: transform 0.3s ease;
 }
+
 .product-card:hover .card-img-top {
   transform: scale(1.05);
 }
+
 .product-card .card-body {
   padding: 1.25rem;
 }
+
 .product-card .card-title {
   font-size: 1.05rem;
   font-weight: 600;
-  color: #212529;
+  color: var(--dark-green);
   min-height: 2.6em;
 }
+
 .product-card .card-text_description {
   font-size: 0.85rem;
   color: #6c757d;
   min-height: 4em;
 }
+
 .product-card .card-text_stock small {
   font-size: 0.8rem;
   color: #888;
 }
+
 .product-card .text-primary {
-  color: #007bff !important;
+  color: var(--primary-green) !important;
 }
+
 .product-card .add-to-cart-button {
   font-weight: 500;
   padding: 0.6rem 1rem;
+  background: linear-gradient(45deg, var(--primary-green), var(--accent-green));
+  border: none;
+  color: white;
+  transition: all 0.3s ease;
 }
+
+.product-card .add-to-cart-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(34, 139, 34, 0.3);
+}
+
 .product-card .add-to-cart-button:disabled {
   background-color: #adb5bd;
   border-color: #adb5bd;
@@ -209,30 +403,561 @@ section.container {
   font-weight: 500;
 }
 
-/* Footer */
+/* About Section - Keep original photo styling */
+#about-us-section {
+  background: linear-gradient(135deg, rgba(144, 238, 144, 0.1) 0%, rgba(50, 205, 50, 0.1) 100%);
+  position: relative;
+  z-index: 2;
+}
+
+#about-us-section .text-primary {
+  color: var(--primary-green) !important;
+}
+
+/* Contact Section - Green Theme */
+#contact-section {
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(135deg, var(--bg-green) 0%, rgba(144, 238, 144, 0.1) 100%);
+}
+
+#contact-section .card {
+  border: 2px solid var(--light-green);
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+}
+
+#contact-section .form-control {
+  border: 2px solid var(--light-green);
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+
+#contact-section .form-control:focus {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 0.2rem rgba(34, 139, 34, 0.25);
+}
+
+#contact-section .btn-primary {
+  background: linear-gradient(45deg, var(--primary-green), var(--accent-green));
+  border: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+#contact-section .btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(34, 139, 34, 0.3);
+}
+
+#contact-section .text-primary {
+  color: var(--primary-green) !important;
+}
+
+#contact-section .fa-3x {
+  color: var(--primary-green) !important;
+  animation: iconBounce 2s ease-in-out infinite;
+}
+
+@keyframes iconBounce {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Footer - Green Theme */
+footer.bg-dark {
+  background: linear-gradient(135deg, var(--dark-green) 0%, var(--primary-green) 100%) !important;
+  position: relative;
+  z-index: 2;
+}
+
 footer.bg-dark p {
   margin-bottom: 0.2rem;
 }
+
 footer.bg-dark a {
   transition: color 0.2s ease;
 }
+
 footer.bg-dark a:hover {
-  color: #fff !important;
+  color: var(--light-green) !important;
+}
+
+/* AUTH PAGES STYLES */
+
+/* Auth wrapper for login/register pages */
+main {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  padding: 2rem 1rem;
+}
+
+.auth-wrapper {
+  display: flex;
+  max-width: 1000px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(107, 142, 35, 0.3);
+}
+
+.auth-illustration {
+  flex: 1;
+  background: linear-gradient(45deg, #228b22, #32cd32, #90ee90);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 500px;
+}
+
+/* Character animations for auth pages */
+.character {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.character-body {
+  width: 80px;
+  height: 100px;
+  background: #2e8b57;
+  border-radius: 40px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 3px solid #fff;
+}
+
+.character-head {
+  width: 60px;
+  height: 60px;
+  background: #98fb98;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  top: 20%;
+  transform: translateX(-50%);
+  border: 3px solid #fff;
+}
+
+.character-eyes {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.eye {
+  width: 8px;
+  height: 8px;
+  background: #2d5016;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 3px;
+  animation: blink 3s infinite;
+}
+
+@keyframes blink {
+  0%,
+  90%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
+}
+
+.character-mouth {
+  position: absolute;
+  top: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 10px;
+  border: 2px solid #2d5016;
+  border-top: none;
+  border-radius: 0 0 20px 20px;
+}
+
+.character-arms {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.arm {
+  width: 30px;
+  height: 8px;
+  background: #2e8b57;
+  border-radius: 4px;
+  position: absolute;
+  animation: wave 1.5s ease-in-out infinite alternate;
+  border: 1px solid #fff;
+}
+
+.arm.left {
+  left: -35px;
+  transform-origin: right center;
+}
+.arm.right {
+  right: -35px;
+  transform-origin: left center;
+}
+
+@keyframes wave {
+  0% {
+    transform: rotate(-20deg);
+  }
+  100% {
+    transform: rotate(20deg);
+  }
+}
+
+.pickle-jar {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent 0%, #228b22 20%, #2e8b57 100%);
+  border-radius: 5px 5px 15px 15px;
+  border: 3px solid #fff;
+  animation: wiggle 2s ease-in-out infinite;
+}
+
+.pickle-jar::before {
+  content: "🥒";
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+.welcome-text {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: white;
+}
+
+.welcome-text h3 {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-text p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Register page specific styles */
+.characters-container {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+.character.friend1 {
+  animation: bounce 2s ease-in-out infinite;
+  width: 150px;
+  height: 150px;
+}
+
+.character.friend2 {
+  animation: bounce 2s ease-in-out infinite 0.5s;
+  width: 150px;
+  height: 150px;
+}
+
+.friend1 .character-body {
+  background: #2e8b57;
+  border: 3px solid #fff;
+  width: 60px;
+  height: 80px;
+}
+
+.friend2 .character-body {
+  background: #228b22;
+  border: 3px solid #fff;
+  width: 60px;
+  height: 80px;
+}
+
+.friend1 .character-head,
+.friend2 .character-head {
+  width: 50px;
+  height: 50px;
+  top: 25%;
+}
+
+.friend1 .eye,
+.friend2 .eye {
+  width: 6px;
+  height: 6px;
+  margin: 0 2px;
+  animation: blink 4s infinite;
+}
+
+.friend1 .character-mouth,
+.friend2 .character-mouth {
+  top: 28px;
+  width: 16px;
+  height: 8px;
+}
+
+.friend1 .arm,
+.friend2 .arm {
+  width: 25px;
+  height: 6px;
+}
+
+.friend1 .arm {
+  background: #2e8b57;
+  animation: wave1 1.8s ease-in-out infinite alternate;
+}
+
+.friend2 .arm {
+  background: #228b22;
+  animation: wave2 2.2s ease-in-out infinite alternate;
+}
+
+.arm.left {
+  left: -30px;
+}
+.arm.right {
+  right: -30px;
+}
+
+@keyframes wave1 {
+  0% {
+    transform: rotate(-25deg);
+  }
+  100% {
+    transform: rotate(25deg);
+  }
+}
+
+@keyframes wave2 {
+  0% {
+    transform: rotate(-30deg);
+  }
+  100% {
+    transform: rotate(30deg);
+  }
+}
+
+.high-five {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  animation: highFive 3s ease-in-out infinite;
+}
+
+@keyframes highFive {
+  0%,
+  80%,
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.5);
+  }
+  10%,
+  70% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.2);
+  }
+}
+
+.celebration-text {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: white;
+}
+
+.celebration-text h3 {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.celebration-text p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Auth container styles */
+.auth-container {
+  flex: 1;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.auth-container h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--dark-green);
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--dark-green);
+}
+
+.form-control-lg {
+  padding: 1rem 1.25rem;
+  font-size: 1rem;
+  border: 2px solid var(--light-green);
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+
+.form-control-lg:focus {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 0.2rem rgba(34, 139, 34, 0.25);
+  transform: translateY(-2px);
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 15px;
+  background: linear-gradient(45deg, var(--primary-green), var(--accent-green));
+  border: none;
+  color: white;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-submit:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(34, 139, 34, 0.4);
+  background: linear-gradient(45deg, var(--secondary-green), var(--primary-green));
+}
+
+.btn-submit::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-submit:hover::before {
+  left: 100%;
+}
+
+.message-area {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 15px;
+  text-align: center;
+  display: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.message-success {
+  background: linear-gradient(45deg, #d4edda, #c3e6cb);
+  color: #155724;
+  border: 2px solid #c3e6cb;
+}
+
+.message-error {
+  background: linear-gradient(45deg, #f8d7da, #f5c6cb);
+  color: #721c24;
+  border: 2px solid #f5c6cb;
+}
+
+.auth-links {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1rem;
+}
+
+.auth-links a {
+  color: var(--primary-green);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.auth-links a:hover {
+  color: var(--secondary-green);
+  text-decoration: underline;
 }
 
 /* Responsive Navbar - Mobil için özel düzenlemeler */
 @media (max-width: 991.98px) {
-  /* Navbar brand küçült */
   .navbar-brand {
     font-size: 1.1rem;
   }
 
-  /* Ana menü linklerini düzenle */
   .navbar-nav {
     text-align: center;
     margin: 1rem 0;
     padding: 1rem 0;
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid var(--light-green);
   }
 
   .navbar-nav .nav-item {
@@ -247,10 +972,9 @@ footer.bg-dark a:hover {
   }
 
   .navbar-nav .nav-link:hover {
-    background-color: #f8f9fa;
+    background-color: var(--light-green);
   }
 
-  /* User info bölümünü yeniden düzenle */
   .navbar-user-info {
     width: 100%;
     flex-direction: column;
@@ -258,24 +982,22 @@ footer.bg-dark a:hover {
     gap: 0;
     margin-top: 1rem;
     padding: 1rem;
-    background-color: #f8f9fa;
+    background: linear-gradient(135deg, rgba(144, 238, 144, 0.2) 0%, rgba(50, 205, 50, 0.1) 100%);
     border-radius: 0.5rem;
   }
 
-  /* Kullanıcı selamlaması */
   .navbar-user-greeting {
     font-size: 1rem;
     text-align: center;
     margin-bottom: 1rem;
     padding: 0.5rem;
-    background-color: #e7f3ff;
+    background: rgba(144, 238, 144, 0.3);
     border-radius: 0.375rem;
-    color: #0d6efd !important;
+    color: var(--primary-green) !important;
     width: 100%;
     max-width: none;
   }
 
-  /* Auth linkler grubu */
   .auth-links-group {
     flex-direction: column;
     align-items: center;
@@ -283,32 +1005,30 @@ footer.bg-dark a:hover {
     width: 100%;
   }
 
-  /* Auth linkler */
   .auth-link {
     display: block;
     text-align: center;
     padding: 0.75rem 1rem;
     font-size: 1rem;
-    border: 1px solid #dee2e6;
+    border: 1px solid var(--light-green);
     border-radius: 0.5rem;
     background-color: #ffffff;
-    color: #495057 !important;
+    color: var(--primary-green) !important;
     font-weight: 500;
     width: 100%;
     max-width: 280px;
   }
 
   .auth-link:hover {
-    background-color: #0d6efd;
+    background-color: var(--primary-green);
     color: #ffffff !important;
-    border-color: #0d6efd;
+    border-color: var(--primary-green);
   }
 
-  /* Admin butonu - mobilde normal link gibi */
   #adminLink {
     background-color: #ffffff !important;
-    border: 1px solid #dee2e6 !important;
-    color: #495057 !important;
+    border: 1px solid var(--light-green) !important;
+    color: var(--primary-green) !important;
     padding: 0.75rem 1rem;
     font-size: 1rem;
     border-radius: 0.5rem;
@@ -318,12 +1038,11 @@ footer.bg-dark a:hover {
   }
 
   #adminLink:hover {
-    background-color: #0d6efd !important;
+    background-color: var(--primary-green) !important;
     color: #ffffff !important;
-    border-color: #0d6efd !important;
+    border-color: var(--primary-green) !important;
   }
 
-  /* Favoriler butonu */
   .btn-outline-danger {
     padding: 0.75rem 1rem;
     font-size: 1rem;
@@ -335,17 +1054,52 @@ footer.bg-dark a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    border-color: var(--primary-green);
+    color: var(--primary-green);
   }
 
   .btn-outline-danger:hover {
-    background-color: #dc3545;
-    border-color: #dc3545;
+    background-color: var(--primary-green);
+    border-color: var(--primary-green);
+  }
+
+  /* Auth pages responsive */
+  .auth-wrapper {
+    flex-direction: column;
+    max-width: 500px;
+  }
+
+  .auth-illustration {
+    min-height: 200px;
+  }
+
+  .character {
+    width: 120px;
+    height: 120px;
+  }
+
+  .characters-container {
+    gap: 20px;
+  }
+
+  .character.friend1,
+  .character.friend2 {
+    width: 100px;
+    height: 100px;
+  }
+
+  .auth-container {
+    padding: 2rem 1.5rem;
   }
 }
 
 /* Çok küçük ekranlar için */
 @media (max-width: 575.98px) {
   .navbar-brand {
+    font-size: 1rem;
+  }
+
+  .floating-veggies .veggie {
     font-size: 1rem;
   }
 
@@ -401,5 +1155,17 @@ footer.bg-dark a:hover {
   .product-card .card-text_description {
     min-height: auto;
     -webkit-line-clamp: 2;
+  }
+
+  .auth-wrapper {
+    margin: 1rem;
+  }
+
+  .auth-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .auth-container h2 {
+    font-size: 1.5rem;
   }
 }

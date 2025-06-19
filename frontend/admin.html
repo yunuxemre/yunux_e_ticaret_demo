@@ -1,415 +1,1317 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Paneli - Tansu Şahal Salamura</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Kendi Özel Stillerimiz -->
-  <link rel="stylesheet" href="styles.css">
-  <style>
-      /* Admin paneline özel stiller */
-      body { display: flex; flex-direction: column; min-height: 100vh; background-color: #f4f7f6; }
-      main.admin-container { flex-grow: 1; }
-      .admin-container { max-width: 960px; margin: 30px auto; padding: 25px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
-      .admin-container h2, .admin-container h3 { text-align: center; margin-bottom: 25px; color: #333; font-weight: 600;}
-      .form-group { margin-bottom: 1.25rem; }
-      .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #495057; }
-      .form-control-lg { padding: 0.7rem 1rem; font-size: 1rem; }
-      .form-text { font-size: 0.8rem; }
-      .product-list table { width: 100%; border-collapse: collapse; margin-top: 25px; background-color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,.06);}
-      .product-list th, .product-list td { border: 1px solid #e0e0e0; padding: 0.8rem; text-align: left; vertical-align: middle;}
-      .product-list th { background-color: #f7f9fc; font-weight: 600;}
-      .product-list .actions button { margin-right: 6px; padding: 0.3rem 0.6rem; font-size:0.85em;}
-      .message-area { margin-top: 1rem; padding: 0.8rem 1.25rem; border-radius: 0.375rem; text-align: center; display:none; font-size: 0.95rem;}
-      .btn-lg { padding: 0.75rem 1.5rem; font-size: 1.05rem;}
-      
-      /* Video upload alanı için özel stiller */
-      .video-upload-section {
-          background-color: #f8f9fa;
-          border: 2px dashed #dee2e6;
-          border-radius: 0.5rem;
-          padding: 1.5rem;
-          margin-bottom: 1rem;
-          text-align: center;
-          transition: border-color 0.3s ease;
-      }
-      .video-upload-section:hover {
-          border-color: #0d6efd;
-      }
-      .video-upload-section.dragover {
-          border-color: #0d6efd;
-          background-color: #e7f3ff;
-      }
-      .video-preview {
-          max-width: 100%;
-          max-height: 200px;
-          margin-top: 1rem;
-          border-radius: 0.375rem;
-      }
-      .upload-progress {
-          margin-top: 1rem;
-          display: none;
-      }
-      .video-option-tabs {
-          margin-bottom: 1.5rem;
-      }
-      .video-option-tabs .nav-link {
-          color: #495057;
-          font-weight: 500;
-      }
-      .video-option-tabs .nav-link.active {
-          color: #ffffff; /* Aktif sekmenin yazı rengini beyaz yap */
-      }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Paneli - Tansu Şahal Salamura</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Admin Panel Modern Design */
+        :root {
+            --primary-green: #228b22;
+            --secondary-green: #2e8b57;
+            --light-green: #90ee90;
+            --dark-green: #2d5016;
+            --accent-green: #32cd32;
+            --bg-green: #f0fff0;
+            --admin-primary: #2563eb;
+            --admin-secondary: #1e40af;
+            --admin-success: #059669;
+            --admin-warning: #d97706;
+            --admin-danger: #dc2626;
+            --admin-dark: #1f2937;
+            --admin-light: #f8fafc;
+            --admin-border: #e5e7eb;
+        }
 
-      /* Bildirim Sistemi Stilleri */
-      .notification-container {
-          position: fixed;
-          top: 20px;
-          right: 20px;
-          z-index: 9999;
-          max-width: 350px;
-      }
+        * {
+            box-sizing: border-box;
+        }
 
-      .notification-bubble {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          padding: 16px 20px;
-          border-radius: 12px;
-          margin-bottom: 10px;
-          box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-          transform: translateX(400px);
-          opacity: 0;
-          transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-          position: relative;
-          overflow: hidden;
-      }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--bg-green) 0%, #e6ffe6 100%);
+            color: var(--dark-green);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            position: relative;
+        }
 
-      .notification-bubble.show {
-          transform: translateX(0);
-          opacity: 1;
-      }
+        /* Floating Background */
+        .floating-veggies {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+        }
 
-      .notification-bubble.success {
-          background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-      }
+        .veggie {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.03;
+            animation: float 15s ease-in-out infinite;
+        }
 
-      .notification-bubble.error {
-          background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
-      }
+        .veggie:nth-child(1) { left: 5%; animation-delay: 0s; }
+        .veggie:nth-child(2) { left: 15%; animation-delay: 3s; }
+        .veggie:nth-child(3) { left: 25%; animation-delay: 6s; }
+        .veggie:nth-child(4) { left: 35%; animation-delay: 9s; }
+        .veggie:nth-child(5) { left: 45%; animation-delay: 12s; }
 
-      .notification-bubble.info {
-          background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
-      }
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); }
+            50% { transform: translateY(-100px) rotate(180deg); }
+        }
 
-      .notification-bubble.warning {
-          background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
-      }
+        /* Navbar - Green Theme */
+        .navbar-light.bg-white {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(15px);
+            border-bottom: 2px solid var(--light-green);
+            z-index: 1000;
+        }
 
-      .notification-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin-bottom: 8px;
-      }
+        .navbar-brand {
+            letter-spacing: 0.5px;
+            color: var(--primary-green) !important;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
 
-      .notification-title {
-          font-weight: 600;
-          font-size: 14px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-      }
+        .navbar-brand::before {
+            content: "🥒 ";
+            font-size: 1.2em;
+        }
 
-      .notification-close {
-          background: none;
-          border: none;
-          color: white;
-          font-size: 18px;
-          cursor: pointer;
-          opacity: 0.7;
-          transition: opacity 0.2s;
-          padding: 0;
-          width: 20px;
-          height: 20px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-      }
+        .nav-link {
+            font-weight: 500;
+            color: var(--dark-green) !important;
+            transition: all 0.3s ease;
+            margin: 0 0.5rem;
+            padding: 0.5rem 0.75rem !important;
+            position: relative;
+        }
 
-      .notification-close:hover {
-          opacity: 1;
-      }
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary-green) !important;
+            transform: translateY(-2px);
+        }
 
-      .notification-message {
-          font-size: 13px;
-          line-height: 1.4;
-          opacity: 0.95;
-      }
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background: var(--accent-green);
+            transition: all 0.3s ease;
+        }
 
-      .notification-time {
-          font-size: 11px;
-          opacity: 0.7;
-          margin-top: 6px;
-      }
+        .nav-link:hover::after {
+            width: 100%;
+            left: 0;
+        }
 
-      .notification-progress {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          height: 3px;
-          background: rgba(255,255,255,0.3);
-          width: 100%;
-          transform-origin: left;
-          animation: progressBar 5s linear forwards;
-      }
+        /* Navbar User Info */
+        .navbar-user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
 
-      @keyframes progressBar {
-          from { transform: scaleX(1); }
-          to { transform: scaleX(0); }
-      }
+        .navbar-user-greeting {
+            white-space: nowrap;
+            font-size: 0.85rem;
+            color: var(--primary-green) !important;
+            font-weight: 600;
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-      /* Bildirim Badge */
-      .notification-badge {
-          position: fixed;
-          top: 80px;
-          right: 20px;
-          background: #dc3545;
-          color: white;
-          border-radius: 50%;
-          width: 24px;
-          height: 24px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 12px;
-          font-weight: bold;
-          z-index: 10000;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
-      }
+        .auth-links-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
-      .notification-badge:hover {
-          transform: scale(1.1);
-          box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
-      }
+        .auth-link {
+            font-weight: 500;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            padding: 0.35rem 0.6rem;
+            border-radius: 0.375rem;
+            transition: all 0.3s ease;
+            text-decoration: none !important;
+            color: var(--primary-green) !important;
+        }
 
-      .notification-badge.hidden {
-          display: none;
-      }
-  </style>
+        .auth-link:hover {
+            background-color: var(--light-green);
+            color: var(--dark-green) !important;
+            transform: translateY(-2px);
+        }
 
-<style>
-.toast-message {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background-color: #333;
-  color: white;
-  padding: 12px 20px;
-  border-radius: 6px;
-  font-size: 16px;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  z-index: 9999;
-}
-.toast-success {
-  background-color: #28a745;
-}
-.toast-error {
-  background-color: #dc3545;
-}
-</style>
+        .btn-outline-danger {
+            font-size: 0.85rem;
+            padding: 0.4rem 0.8rem;
+            white-space: nowrap;
+            border-color: var(--primary-green);
+            color: var(--primary-green);
+        }
 
+        .btn-outline-danger:hover {
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
+        }
+
+        /* Main Admin Container */
+        .admin-container {
+            position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Admin Header */
+        .admin-header {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(34, 139, 34, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .admin-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+
+        .admin-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .admin-header p {
+            font-size: 1.1rem;
+            margin: 0.5rem 0 0 0;
+            opacity: 0.9;
+        }
+
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 2px solid var(--light-green);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-green), var(--accent-green));
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon.products { background: linear-gradient(45deg, var(--admin-primary), #3b82f6); }
+        .stat-icon.stock { background: linear-gradient(45deg, var(--admin-success), #10b981); }
+        .stat-icon.orders { background: linear-gradient(45deg, var(--admin-warning), #f59e0b); }
+        .stat-icon.revenue { background: linear-gradient(45deg, var(--admin-danger), #ef4444); }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--admin-dark);
+            margin: 0;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        /* Form Sections */
+        .form-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid var(--light-green);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-green);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-green);
+            position: relative;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary-green);
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-green);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            border: 2px solid var(--admin-border);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 0.2rem rgba(34, 139, 34, 0.25);
+            background: white;
+        }
+
+        .form-control-lg {
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+        }
+
+        /* Video Upload Section */
+        .video-upload-section {
+            background: linear-gradient(135deg, rgba(144, 238, 144, 0.1) 0%, rgba(50, 205, 50, 0.05) 100%);
+            border: 2px dashed var(--light-green);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-upload-section:hover {
+            border-color: var(--primary-green);
+            background: linear-gradient(135deg, rgba(144, 238, 144, 0.2) 0%, rgba(50, 205, 50, 0.1) 100%);
+        }
+
+        .video-upload-section.dragover {
+            border-color: var(--accent-green);
+            background: linear-gradient(135deg, rgba(50, 205, 50, 0.2) 0%, rgba(144, 238, 144, 0.15) 100%);
+            transform: scale(1.02);
+        }
+
+        /* Tabs */
+        .nav-tabs {
+            border: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-tabs .nav-link {
+            border: 2px solid var(--admin-border);
+            border-radius: 12px 12px 0 0;
+            color: var(--dark-green);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            margin-right: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link:hover {
+            border-color: var(--light-green);
+            background: rgba(144, 238, 144, 0.1);
+        }
+
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(45deg, var(--primary-green), var(--accent-green));
+            color: white;
+            border-color: var(--primary-green);
+        }
+
+        /* Buttons */
+        .btn {
+            border-radius: 12px;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-green), var(--accent-green));
+            border: none;
+            box-shadow: 0 4px 15px rgba(34, 139, 34, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(34, 139, 34, 0.4);
+        }
+
+        .btn-outline-secondary {
+            border: 2px solid var(--admin-border);
+            color: var(--dark-green);
+        }
+
+        .btn-outline-secondary:hover {
+            background: var(--light-green);
+            border-color: var(--primary-green);
+            color: var(--dark-green);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, var(--admin-success), #10b981);
+            border: none;
+        }
+
+        .btn-warning {
+            background: linear-gradient(45deg, var(--admin-warning), #f59e0b);
+            border: none;
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, var(--admin-danger), #ef4444);
+            border: none;
+        }
+
+        /* Table Styling */
+        .table-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid var(--light-green);
+            overflow: hidden;
+        }
+
+        .table {
+            margin: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .table thead th {
+            background: linear-gradient(45deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--admin-border);
+        }
+
+        .table tbody tr:hover {
+            background: rgba(144, 238, 144, 0.1);
+        }
+
+        .product-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid var(--light-green);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            border-radius: 8px;
+        }
+
+        /* Notification System */
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 350px;
+        }
+
+        .notification-bubble {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: white;
+            padding: 1rem 1.25rem;
+            border-radius: 15px;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .notification-bubble.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .notification-bubble.success {
+            background: linear-gradient(135deg, var(--admin-success) 0%, #10b981 100%);
+        }
+
+        .notification-bubble.error {
+            background: linear-gradient(135deg, var(--admin-danger) 0%, #ef4444 100%);
+        }
+
+        .notification-bubble.warning {
+            background: linear-gradient(135deg, var(--admin-warning) 0%, #f59e0b 100%);
+        }
+
+        /* Message Area */
+        .message-area {
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            border: 2px solid;
+        }
+
+        .message-success {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+            color: var(--admin-success);
+            border-color: var(--admin-success);
+        }
+
+        .message-error {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+            color: var(--admin-danger);
+            border-color: var(--admin-danger);
+        }
+
+        /* Footer */
+        .bg-dark {
+            background: linear-gradient(135deg, var(--dark-green) 0%, var(--primary-green) 100%) !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 0 0.5rem;
+            }
+
+            .admin-header {
+                padding: 1.5rem;
+                text-align: center;
+            }
+
+            .admin-header h1 {
+                font-size: 2rem;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .form-section {
+                padding: 1.5rem;
+            }
+
+            .table-container {
+                padding: 1rem;
+                overflow-x: auto;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .navbar-nav {
+                text-align: center;
+                margin: 1rem 0;
+                padding: 1rem 0;
+                border-bottom: 1px solid var(--light-green);
+            }
+
+            .navbar-user-info {
+                width: 100%;
+                flex-direction: column;
+                align-items: center;
+                gap: 0;
+                margin-top: 1rem;
+                padding: 1rem;
+                background: linear-gradient(135deg, rgba(144, 238, 144, 0.2) 0%, rgba(50, 205, 50, 0.1) 100%);
+                border-radius: 0.5rem;
+            }
+
+            .auth-links-group {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.75rem;
+                width: 100%;
+            }
+
+            .auth-link {
+                display: block;
+                text-align: center;
+                padding: 0.75rem 1rem;
+                font-size: 1rem;
+                border: 1px solid var(--light-green);
+                border-radius: 0.5rem;
+                background-color: #ffffff;
+                color: var(--primary-green) !important;
+                font-weight: 500;
+                width: 100%;
+                max-width: 280px;
+            }
+
+            .btn-outline-danger {
+                padding: 0.75rem 1rem;
+                font-size: 1rem;
+                border-radius: 0.5rem;
+                background-color: #ffffff;
+                width: 100%;
+                max-width: 280px;
+                text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- Bildirim Konteyneri -->
-  <div id="notificationContainer" class="notification-container"></div>
-  
-  <!-- Bildirim Badge -->
-  <div id="notificationBadge" class="notification-badge hidden">
-      <span id="notificationCount">0</span>
-  </div>
+    <!-- Floating vegetables background -->
+    <div class="floating-veggies">
+        <div class="veggie">🥒</div>
+        <div class="veggie">🥬</div>
+        <div class="veggie">🥦</div>
+        <div class="veggie">🌿</div>
+        <div class="veggie">🥒</div>
+    </div>
 
-  <!-- Navbar (Header) -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm sticky-top main-navbar">
-      <div class="container">
-          <a class="navbar-brand fw-bold fs-4" href="/">Tansu Şahal Salamura</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-              <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="mainNav">
-              <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                  <li class="nav-item"><a class="nav-link" href="/">Ana Sayfa</a></li>
-                  <li class="nav-item"><a class="nav-link" href="/#products">Tüm Ürünler</a></li>
-                  <li class="nav-item"><a class="nav-link" href="/#about-us-section">Hakkımızda</a></li>
-                  <li class="nav-item"><a class="nav-link" href="/#contact-section">İletişim</a></li>
-              </ul>
-              <div class="d-flex align-items-center navbar-user-info">
-                  <span id="userGreeting" class="navbar-text navbar-user-greeting me-3" style="display:none;"></span>
-                  <div class="auth-links-group">
-                      <a href="login.html" id="loginLink" class="text-dark text-decoration-none auth-link">Giriş Yap</a>
-                      <a href="register.html" id="registerLink" class="text-dark text-decoration-none auth-link">Kayıt Ol</a>
-                      <a href="#" id="logoutLink" class="text-dark text-decoration-none auth-link" style="display:none;">Çıkış Yap</a>
-                      <a href="admin.html" id="adminLink" class="text-dark text-decoration-none auth-link" style="display:none;">Admin</a>
-                      <a href="favorites.html" class="btn btn-outline-danger position-relative rounded-pill px-3">
-                          <i class="fas fa-heart me-1"></i> Favoriler
-                          <span id="favorites-item-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">0</span>
-                      </a>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </nav>
+    <!-- Bildirim Konteyneri -->
+    <div id="notificationContainer" class="notification-container"></div>
 
-  <main class="admin-container container my-4">
-      <h2 class="mb-4">Ürün Yönetimi</h2>
-      <div id="adminMessageArea" class="message-area" style="display:none;"></div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm sticky-top main-navbar">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-4" href="/">Tansu Şahal Salamura</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="/">Ana Sayfa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#products">Tüm Ürünler</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#about-us-section">Hakkımızda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#contact-section">İletişim</a></li>
+                </ul>
+                <div class="d-flex align-items-center navbar-user-info">
+                    <span id="userGreeting" class="navbar-text navbar-user-greeting me-3" style="display:none;"></span>
+                    <div class="auth-links-group">
+                        <a href="login.html" id="loginLink" class="text-dark text-decoration-none auth-link">Giriş Yap</a>
+                        <a href="register.html" id="registerLink" class="text-dark text-decoration-none auth-link">Kayıt Ol</a>
+                        <a href="#" id="logoutLink" class="text-dark text-decoration-none auth-link" style="display:none;">Çıkış Yap</a>
+                        <a href="admin.html" id="adminLink" class="text-dark text-decoration-none auth-link" style="display:none;">Admin</a>
+                        <a href="favorites.html" class="btn btn-outline-danger position-relative rounded-pill px-3">
+                            <i class="fas fa-heart me-1"></i> Favoriler
+                            <span id="favorites-item-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">0</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-      <section id="addProductSection" class="card card-body shadow-sm mb-4 p-4">
-          <h3 class="mb-4 border-bottom pb-3">Yeni Ürün Ekle / Düzenle</h3>
-          <form id="productForm" novalidate>
-              <input type="hidden" id="productId" name="id">
-              <div class="form-group mb-3">
-                  <label for="name" class="form-label">Ürün Adı:</label>
-                  <input type="text" class="form-control form-control-lg" id="name" name="name">
-              </div>
-              <div class="form-group mb-3">
-                  <label for="description" class="form-label">Açıklama:</label>
-                  <textarea class="form-control form-control-lg" id="description" name="description" rows="4"></textarea>
-              </div>
-              <div class="row g-3">
-                  <div class="col-md-6 form-group mb-3">
-                      <label for="price" class="form-label">Fiyat (TL):</label>
-                      <input type="number" class="form-control form-control-lg" id="price" name="price" step="0.01" min="0">
-                  </div>
-                  <div class="col-md-6 form-group mb-3">
-                      <label for="stock" class="form-label">Stok Adedi:</label>
-                      <input type="number" class="form-control form-control-lg" id="stock" name="stock" min="0">
-                  </div>
-              </div>
-              <div class="form-group mb-3">
-                  <label for="image" class="form-label">Resim Yolu/URL'si:</label>
-                  <input type="text" class="form-control form-control-lg" id="image" name="image" placeholder="/images/urun-adi.jpg">
-              </div>
-              <div class="form-group mb-3">
-                  <label for="category" class="form-label">Kategori (Opsiyonel):</label>
-                  <input type="text" class="form-control form-control-lg" id="category" name="category" placeholder="Örn: Salamura, Turşu, Zeytinyağı">
-              </div>
+    <main class="admin-container">
+        <!-- Admin Header -->
+        <div class="admin-header">
+            <h1><i class="fas fa-cogs me-3"></i>Admin Paneli</h1>
+            <p>Ürün yönetimi ve site kontrolü</p>
+        </div>
 
-              <!-- Video Yükleme Bölümü -->
-              <div class="form-group mb-3">
-                  <label class="form-label">Ürün Videosu:</label>
-                  
-                  <!-- Video seçenekleri tabları -->
-                  <ul class="nav nav-tabs video-option-tabs" id="videoTabs" role="tablist">
-                      <li class="nav-item" role="presentation">
-                          <button class="nav-link active" id="youtube-tab" data-bs-toggle="tab" data-bs-target="#youtube-content" type="button" role="tab">
-                              <i class="fab fa-youtube me-2"></i>YouTube Linki
-                          </button>
-                      </li>
-                      <li class="nav-item" role="presentation">
-                          <button class="nav-link" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload-content" type="button" role="tab">
-                              <i class="fas fa-upload me-2"></i>Video Yükle
-                          </button>
-                      </li>
-                  </ul>
+        <!-- Stats Cards -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon products">
+                    <i class="fas fa-box"></i>
+                </div>
+                <h3 class="stat-number" id="totalProducts">0</h3>
+                <p class="stat-label">Toplam Ürün</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon stock">
+                    <i class="fas fa-warehouse"></i>
+                </div>
+                <h3 class="stat-number" id="totalStock">0</h3>
+                <p class="stat-label">Toplam Stok</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orders">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <h3 class="stat-number">24</h3>
+                <p class="stat-label">Bu Ay Sipariş</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon revenue">
+                    <i class="fas fa-lira-sign"></i>
+                </div>
+                <h3 class="stat-number">15,420</h3>
+                <p class="stat-label">Bu Ay Gelir</p>
+            </div>
+        </div>
 
-                  <div class="tab-content" id="videoTabContent">
-                      <!-- YouTube Tab -->
-                      <div class="tab-pane fade show active" id="youtube-content" role="tabpanel">
-                          <div class="mt-3">
-                              <input type="url" class="form-control form-control-lg" id="videoUrl" name="videoUrl" placeholder="https://www.youtube.com/watch?v=n4OflWszcZ0&ab_channel=RewindappStudio">
-                              <div class="form-text small text-muted">YouTube linkini kopyalayın.</div>
-                          </div>
-                      </div>
+        <!-- Message Area -->
+        <div id="adminMessageArea" class="message-area" style="display:none;"></div>
 
-                      <!-- Video Upload Tab -->
-                      <div class="tab-pane fade" id="upload-content" role="tabpanel">
-                          <div class="mt-3">
-                              <div class="video-upload-section" id="videoUploadArea">
-                                  <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
-                                  <h5>Video Dosyası Yükle</h5>
-                                  <p class="text-muted mb-3">Video dosyanızı buraya sürükleyip bırakın veya seçin</p>
-                                  <input type="file" class="form-control" id="videoFile" accept="video/*" style="display: none;">
-                                  <button type="button" class="btn btn-outline-primary" id="selectVideoBtn">
-                                      <i class="fas fa-folder-open me-2"></i>Video Seç
-                                  </button>
-                                  <div class="form-text small text-muted mt-2">Desteklenen formatlar: MP4, AVI, MOV, WMV (Max: 100MB)</div>
-                              </div>
-                              
-                              <!-- Upload Progress -->
-                              <div class="upload-progress" id="uploadProgress">
-                                  <div class="progress">
-                                      <div class="progress-bar" role="progressbar" style="width: 0%"></div>
-                                  </div>
-                                  <small class="text-muted mt-1 d-block">Video yükleniyor...</small>
-                              </div>
+        <!-- Product Form Section -->
+        <section class="form-section" id="addProductSection">
+            <h2 class="section-title">
+                <i class="fas fa-plus-circle me-2"></i>
+                Yeni Ürün Ekle / Düzenle
+            </h2>
+            
+            <form id="productForm" novalidate>
+                <input type="hidden" id="productId" name="id">
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="name" class="form-label">
+                                <i class="fas fa-tag me-2"></i>Ürün Adı
+                            </label>
+                            <input type="text" class="form-control form-control-lg" id="name" name="name" placeholder="Ürün adını girin">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="category" class="form-label">
+                                <i class="fas fa-folder me-2"></i>Kategori
+                            </label>
+                            <input type="text" class="form-control form-control-lg" id="category" name="category" placeholder="Salamura, Turşu, Zeytinyağı">
+                        </div>
+                    </div>
+                </div>
 
-                              <!-- Video Preview -->
-                              <div id="videoPreview" style="display: none;">
-                                  <video class="video-preview" controls>
-                                      <source id="videoSource" src="" type="video/mp4">
-                                      Tarayıcınız video oynatmayı desteklemiyor.
-                                  </video>
-                                  <div class="mt-2">
-                                      <button type="button" class="btn btn-sm btn-danger" id="removeVideoBtn">
-                                          <i class="fas fa-trash me-1"></i>Videoyu Kaldır
-                                      </button>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
+                <div class="form-group">
+                    <label for="description" class="form-label">
+                        <i class="fas fa-align-left me-2"></i>Açıklama
+                    </label>
+                    <textarea class="form-control form-control-lg" id="description" name="description" rows="4" placeholder="Ürün açıklamasını girin"></textarea>
+                </div>
 
-              <div class="form-group mb-3">
-                  <label for="purchaseLink" class="form-label">Ürün Satın Alma Linki:</label>
-                  <input type="url" class="form-control form-control-lg" id="purchaseLink" name="purchaseLink" placeholder="https://www.shopier.com/27828973...">
-              </div>
-              <div class="d-grid gap-2 d-md-flex justify-content-md-start mt-4">
-                  <button type="submit" class="btn btn-primary btn-lg px-4">Kaydet / Güncelle</button>
-                  <button type="button" id="clearFormButton" class="btn btn-outline-secondary btn-lg px-4 ms-md-2">Formu Temizle</button>
-              </div>
-          </form>
-      </section>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="price" class="form-label">
+                                <i class="fas fa-lira-sign me-2"></i>Fiyat (TL)
+                            </label>
+                            <input type="number" class="form-control form-control-lg" id="price" name="price" step="0.01" min="0" placeholder="0.00">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="stock" class="form-label">
+                                <i class="fas fa-boxes me-2"></i>Stok Adedi
+                            </label>
+                            <input type="number" class="form-control form-control-lg" id="stock" name="stock" min="0" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="image" class="form-label">
+                                <i class="fas fa-image me-2"></i>Resim URL
+                            </label>
+                            <input type="text" class="form-control form-control-lg" id="image" name="image" placeholder="/images/urun-adi.jpg">
+                        </div>
+                    </div>
+                </div>
 
-      <hr class="my-5">
+                <!-- Video Upload Section -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-video me-2"></i>Ürün Videosu
+                    </label>
+                    
+                    <ul class="nav nav-tabs video-option-tabs" id="videoTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="youtube-tab" data-bs-toggle="tab" data-bs-target="#youtube-content" type="button" role="tab">
+                                <i class="fab fa-youtube me-2"></i>YouTube Linki
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload-content" type="button" role="tab">
+                                <i class="fas fa-upload me-2"></i>Video Yükle
+                            </button>
+                        </li>
+                    </ul>
 
-      <section class="product-list card card-body shadow-sm p-4">
-          <h3 class="mb-4 border-bottom pb-3">Mevcut Ürünler</h3>
-          <div class="table-responsive">
-              <table class="table table-hover align-middle">
-                  <thead class="table-light">
-                      <tr>
-                          <th scope="col" style="width: 10%;">Resim</th>
-                          <th scope="col">Adı</th>
-                          <th scope="col" class="text-end">Fiyat (TL)</th>
-                          <th scope="col" class="text-center">Stok</th>
-                          <th scope="col" class="text-center">Video</th>
-                          <th scope="col" style="width: 20%;" class="text-center">İşlemler</th>
-                      </tr>
-                  </thead>
-                  <tbody id="productListBody">
-                      <!-- Ürünler buraya JS ile eklenecek -->
-                  </tbody>
-              </table>
-          </div>
-      </section>
-  </main>
+                    <div class="tab-content" id="videoTabContent">
+                        <div class="tab-pane fade show active" id="youtube-content" role="tabpanel">
+                            <div class="mt-3">
+                                <input type="url" class="form-control form-control-lg" id="videoUrl" name="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
+                                <div class="form-text">YouTube video linkini buraya yapıştırın</div>
+                            </div>
+                        </div>
 
-  <footer class="bg-dark text-white text-center p-4 mt-auto">
-      <div class="container"><p class="mb-0">© 2025 Tansu Şahal Salamura -  Admin</p></div>
-  </footer>
+                        <div class="tab-pane fade" id="upload-content" role="tabpanel">
+                            <div class="mt-3">
+                                <div class="video-upload-section" id="videoUploadArea">
+                                    <i class="fas fa-cloud-upload-alt fa-3x text-success mb-3"></i>
+                                    <h5>Video Dosyası Yükle</h5>
+                                    <p class="text-muted mb-3">Video dosyanızı buraya sürükleyip bırakın veya seçin</p>
+                                    <input type="file" class="form-control" id="videoFile" accept="video/*" style="display: none;">
+                                    <button type="button" class="btn btn-outline-primary" id="selectVideoBtn">
+                                        <i class="fas fa-folder-open me-2"></i>Video Seç
+                                    </button>
+                                    <div class="form-text mt-2">Desteklenen formatlar: MP4, AVI, MOV, WMV (Max: 100MB)</div>
+                                </div>
+                                
+                                <div class="upload-progress" id="uploadProgress" style="display: none;">
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                    <small class="text-muted mt-1 d-block">Video yükleniyor...</small>
+                                </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="header-updater.js"></script>
-  <script src="admin-scripts.js"></script>
+                                <div id="videoPreview" style="display: none;">
+                                    <video class="video-preview" controls style="max-width: 100%; max-height: 200px; margin-top: 1rem; border-radius: 8px;">
+                                        <source id="videoSource" src="" type="video/mp4">
+                                        Tarayıcınız video oynatmayı desteklemiyor.
+                                    </video>
+                                    <div class="mt-2">
+                                        <button type="button" class="btn btn-sm btn-danger" id="removeVideoBtn">
+                                            <i class="fas fa-trash me-1"></i>Videoyu Kaldır
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="purchaseLink" class="form-label">
+                        <i class="fas fa-shopping-cart me-2"></i>Satın Alma Linki
+                    </label>
+                    <input type="url" class="form-control form-control-lg" id="purchaseLink" name="purchaseLink" placeholder="https://www.shopier.com/...">
+                </div>
+
+                <div class="d-flex gap-3 justify-content-center mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg px-5">
+                        <i class="fas fa-save me-2"></i>Kaydet / Güncelle
+                    </button>
+                    <button type="button" id="clearFormButton" class="btn btn-outline-secondary btn-lg px-4">
+                        <i class="fas fa-eraser me-2"></i>Formu Temizle
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Products Table Section -->
+        <section class="table-container">
+            <h2 class="section-title">
+                <i class="fas fa-list me-2"></i>
+                Mevcut Ürünler
+            </h2>
+            
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 80px;">Resim</th>
+                            <th scope="col">Ürün Adı</th>
+                            <th scope="col" class="text-end">Fiyat</th>
+                            <th scope="col" class="text-center">Stok</th>
+                            <th scope="col" class="text-center">Video</th>
+                            <th scope="col" class="text-center" style="width: 150px;">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productListBody">
+                        <!-- Ürünler buraya JS ile eklenecek -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-dark text-white text-center p-4 mt-5">
+        <div class="container">
+            <p class="mb-0">© 2025 🥒 Tansu Şahal Salamura - Admin Paneli 🌿</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="header-updater.js"></script>
+    <script src="admin-scripts.js"></script>
+    
+    <script>
+        // Stats güncelleme fonksiyonu
+        function updateStats() {
+            const products = JSON.parse(localStorage.getItem('products') || '[]');
+            const totalProducts = products.length;
+            const totalStock = products.reduce((sum, product) => sum + (parseInt(product.stock) || 0), 0);
+            
+            document.getElementById('totalProducts').textContent = totalProducts;
+            document.getElementById('totalStock').textContent = totalStock;
+        }
+
+        // Sayfa yüklendiğinde stats'ları güncelle
+        document.addEventListener('DOMContentLoaded', updateStats);
+        
+        // Form submit edildiğinde stats'ları güncelle
+        document.getElementById('productForm').addEventListener('submit', function() {
+            setTimeout(updateStats, 100);
+        });
+
+// Hata düzeltme ve güvenli scroll fonksiyonu
+function safeScrollToElement(elementId) {
+    try {
+        const element = document.getElementById(elementId);
+        if (element && typeof element.scrollIntoView === 'function') {
+            element.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        } else {
+            console.warn(`Element bulunamadı: ${elementId}`);
+        }
+    } catch (error) {
+        console.error('Scroll hatası:', error);
+    }
+}
+
+// Global scroll fonksiyonunu güvenli hale getir
+window.scrollToDescription = function() {
+    safeScrollToElement('productTabsSection');
+};
+
+// Form validation ve error handling
+document.addEventListener('DOMContentLoaded', function() {
+    // Tüm formları kontrol et
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            // Form validation
+            if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+    });
+
+    // Null element kontrolü
+    const criticalElements = [
+        'productForm', 
+        'productListBody', 
+        'adminMessageArea',
+        'totalProducts',
+        'totalStock'
+    ];
+    
+    criticalElements.forEach(id => {
+        const element = document.getElementById(id);
+        if (!element) {
+            console.warn(`Kritik element bulunamadı: ${id}`);
+        }
+    });
+
+    // Stats güncelleme - null kontrolü ile
+    updateStatsWithErrorHandling();
+});
+
+// Güvenli stats güncelleme fonksiyonu
+function updateStatsWithErrorHandling() {
+    try {
+        const products = JSON.parse(localStorage.getItem('products') || '[]');
+        const totalProducts = products.length;
+        const totalStock = products.reduce((sum, product) => {
+            const stock = parseInt(product.stock) || 0;
+            return sum + stock;
+        }, 0);
+        
+        const totalProductsEl = document.getElementById('totalProducts');
+        const totalStockEl = document.getElementById('totalStock');
+        
+        if (totalProductsEl) {
+            totalProductsEl.textContent = totalProducts;
+        }
+        
+        if (totalStockEl) {
+            totalStockEl.textContent = totalStock;
+        }
+    } catch (error) {
+        console.error('Stats güncelleme hatası:', error);
+    }
+}
+
+// Video upload error handling
+document.addEventListener('DOMContentLoaded', function() {
+    const videoFile = document.getElementById('videoFile');
+    const selectVideoBtn = document.getElementById('selectVideoBtn');
+    
+    if (selectVideoBtn && videoFile) {
+        selectVideoBtn.addEventListener('click', function() {
+            videoFile.click();
+        });
+    }
+    
+    if (videoFile) {
+        videoFile.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // File size kontrolü
+                if (file.size > 100 * 1024 * 1024) { // 100MB
+                    showNotification('Dosya boyutu çok büyük! Maksimum 100MB olmalı.', 'error');
+                    return;
+                }
+                
+                // Video preview
+                const videoPreview = document.getElementById('videoPreview');
+                const videoSource = document.getElementById('videoSource');
+                
+                if (videoPreview && videoSource) {
+                    const url = URL.createObjectURL(file);
+                    videoSource.src = url;
+                    videoPreview.style.display = 'block';
+                }
+            }
+        });
+    }
+});
+
+// Notification sistemi - güvenli
+function showNotification(message, type = 'info') {
+    try {
+        const container = document.getElementById('notificationContainer');
+        if (!container) {
+            console.warn('Notification container bulunamadı');
+            return;
+        }
+        
+        const notification = document.createElement('div');
+        notification.className = `notification-bubble ${type}`;
+        notification.innerHTML = `
+            <div class="notification-header">
+                <div class="notification-title">
+                    <i class="fas fa-${getNotificationIcon(type)}"></i>
+                    ${getNotificationTitle(type)}
+                </div>
+                <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+            </div>
+            <div class="notification-message">${message}</div>
+            <div class="notification-time">${new Date().toLocaleTimeString('tr-TR')}</div>
+            <div class="notification-progress"></div>
+        `;
+        
+        container.appendChild(notification);
+        
+        // Animasyon
+        setTimeout(() => notification.classList.add('show'), 100);
+        
+        // Otomatik kaldırma
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.remove();
+            }
+        }, 5000);
+        
+    } catch (error) {
+        console.error('Notification hatası:', error);
+        // Fallback - basit alert
+        alert(message);
+    }
+}
+
+function getNotificationIcon(type) {
+    const icons = {
+        'success': 'check-circle',
+        'error': 'exclamation-circle',
+        'warning': 'exclamation-triangle',
+        'info': 'info-circle'
+    };
+    return icons[type] || 'info-circle';
+}
+
+function getNotificationTitle(type) {
+    const titles = {
+        'success': 'Başarılı',
+        'error': 'Hata',
+        'warning': 'Uyarı',
+        'info': 'Bilgi'
+    };
+    return titles[type] || 'Bilgi';
+}
+
+// Global error handler
+window.addEventListener('error', function(e) {
+    console.error('Global hata:', e.error);
+    showNotification('Bir hata oluştu. Lütfen sayfayı yenileyin.', 'error');
+});
+
+// Unhandled promise rejection handler
+window.addEventListener('unhandledrejection', function(e) {
+    console.error('Promise hatası:', e.reason);
+    showNotification('Bir işlem hatası oluştu.', 'error');
+});
+
+// Düzenle butonu için güvenli scroll fonksiyonu
+function scrollToForm() {
+    try {
+        const formSection = document.querySelector('.form-section');
+        if (formSection && typeof formSection.scrollIntoView === 'function') {
+            formSection.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }
+    } catch (error) {
+        console.error('Form scroll hatası:', error);
+    }
+}
+
+// Ürün düzenleme fonksiyonu - scroll ile
+function editProduct(productId) {
+    try {
+        const products = JSON.parse(localStorage.getItem('products') || '[]');
+        const product = products.find(p => p.id == productId);
+        
+        if (product) {
+            // Form alanlarını doldur
+            document.getElementById('productId').value = product.id || '';
+            document.getElementById('name').value = product.name || '';
+            document.getElementById('description').value = product.description || '';
+            document.getElementById('price').value = product.price || '';
+            document.getElementById('stock').value = product.stock || '';
+            document.getElementById('image').value = product.image || '';
+            document.getElementById('category').value = product.category || '';
+            document.getElementById('videoUrl').value = product.videoUrl || '';
+            document.getElementById('purchaseLink').value = product.purchaseLink || '';
+            
+            // Forma scroll yap
+            scrollToForm();
+            
+            // Başarı mesajı
+            showNotification('Ürün düzenleme için yüklendi', 'info');
+        } else {
+            showNotification('Ürün bulunamadı!', 'error');
+        }
+    } catch (error) {
+        console.error('Ürün düzenleme hatası:', error);
+        showNotification('Ürün düzenlenirken hata oluştu', 'error');
+    }
+}
+
+// Ürün silme fonksiyonu
+function deleteProduct(productId) {
+    if (confirm('Bu ürünü silmek istediğinizden emin misiniz?')) {
+        try {
+            let products = JSON.parse(localStorage.getItem('products') || '[]');
+            products = products.filter(p => p.id != productId);
+            localStorage.setItem('products', JSON.stringify(products));
+            
+            // Tabloyu yenile
+            loadProductList();
+            updateStatsWithErrorHandling();
+            
+            showNotification('Ürün başarıyla silindi', 'success');
+        } catch (error) {
+            console.error('Ürün silme hatası:', error);
+            showNotification('Ürün silinirken hata oluştu', 'error');
+        }
+    }
+}
+
+// Ürün listesini yükleme fonksiyonu
+function loadProductList() {
+    try {
+        const products = JSON.parse(localStorage.getItem('products') || '[]');
+        const tbody = document.getElementById('productListBody');
+        
+        if (!tbody) {
+            console.warn('Product list body bulunamadı');
+            return;
+        }
+        
+        tbody.innerHTML = '';
+        
+        if (products.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">
+                        <i class="fas fa-box-open fa-2x mb-2"></i><br>
+                        Henüz ürün eklenmemiş
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        products.forEach(product => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>
+                    <img src="${product.image || '/placeholder.svg?height=60&width=60'}" 
+                         alt="${product.name}" 
+                         class="product-image"
+                         onerror="this.src='/placeholder.svg?height=60&width=60'">
+                </td>
+                <td>
+                    <strong>${product.name || 'İsimsiz Ürün'}</strong>
+                    ${product.category ? `<br><small class="text-muted">${product.category}</small>` : ''}
+                </td>
+                <td class="text-end">
+                    <strong>${parseFloat(product.price || 0).toFixed(2)} TL</strong>
+                </td>
+                <td class="text-center">
+                    <span class="badge ${parseInt(product.stock) > 0 ? 'bg-success' : 'bg-danger'}">
+                        ${product.stock || 0}
+                    </span>
+                </td>
+                <td class="text-center">
+                    ${product.videoUrl ? 
+                        '<i class="fas fa-video text-success" title="Video var"></i>' : 
+                        '<i class="fas fa-video text-muted" title="Video yok"></i>'
+                    }
+                </td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="btn btn-warning btn-sm" onclick="editProduct(${product.id})" title="Düzenle">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})" title="Sil">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+    } catch (error) {
+        console.error('Ürün listesi yükleme hatası:', error);
+        showNotification('Ürün listesi yüklenirken hata oluştu', 'error');
+    }
+}
+
+// Sayfa yüklendiğinde ürün listesini yükle
+document.addEventListener('DOMContentLoaded', function() {
+    loadProductList();
+});
+
+// Form temizleme fonksiyonu
+document.getElementById('clearFormButton')?.addEventListener('click', function() {
+    document.getElementById('productForm').reset();
+    document.getElementById('productId').value = '';
+    
+    // Video preview'ı gizle
+    const videoPreview = document.getElementById('videoPreview');
+    if (videoPreview) {
+        videoPreview.style.display = 'none';
+    }
+    
+    showNotification('Form temizlendi', 'info');
+});
+</script>
 </body>
 </html>

@@ -36,22 +36,42 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.removeItem("userInfo")
     }
 
+    console.log("Debug - UserInfo:", userInfo) // Debug log
+
     if (userGreetingElement && loginLinkElement && registerLinkElement && logoutLinkElement && adminLinkElement) {
       if (userInfo && userInfo.token) {
         userGreetingElement.textContent = `Merhaba, ${userInfo.name}!`
         userGreetingElement.style.display = "inline"
         loginLinkElement.style.display = "none"
         registerLinkElement.style.display = "none"
-        logoutLinkElement.style.display = "inline"
-        if (userInfo.role === "admin") adminLinkElement.style.display = "inline"
-        else adminLinkElement.style.display = "none"
+
+        // Force display with !important override
+        logoutLinkElement.style.setProperty("display", "inline", "important")
+
+        if (userInfo.role === "admin") {
+          adminLinkElement.style.setProperty("display", "inline", "important")
+        } else {
+          adminLinkElement.style.display = "none"
+        }
+
+        console.log("Debug - Logout link should be visible") // Debug log
       } else {
         userGreetingElement.style.display = "none"
         loginLinkElement.style.display = "inline"
         registerLinkElement.style.display = "inline"
         logoutLinkElement.style.display = "none"
         adminLinkElement.style.display = "none"
+
+        console.log("Debug - User not logged in") // Debug log
       }
+    } else {
+      console.log("Debug - Missing elements:", {
+        userGreeting: !!userGreetingElement,
+        loginLink: !!loginLinkElement,
+        registerLink: !!registerLinkElement,
+        logoutLink: !!logoutLinkElement,
+        adminLink: !!adminLinkElement,
+      })
     }
 
     const currentPath = window.location.pathname
