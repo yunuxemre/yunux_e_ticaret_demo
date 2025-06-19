@@ -115,7 +115,7 @@ section.container {
 }
 
 .navbar-brand::before {
-  content: "🥒 ";
+  content: " ";
   font-size: 1.2em;
 }
 
