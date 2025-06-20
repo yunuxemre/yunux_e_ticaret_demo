@@ -432,6 +432,104 @@ section.container {
   border-color: #adb5bd;
 }
 
+/* Mobil için ürün kartları optimizasyonu */
+@media (max-width: 767.98px) {
+  /* Bootstrap'ın row-cols-2 sistemini koruyoruz, sadece gap'i ayarlıyoruz */
+  .products-container.row {
+    --bs-gutter-x: 0.75rem;
+    --bs-gutter-y: 0.75rem;
+  }
+
+  /* Kart içeriklerini optimize ediyoruz */
+  .product-card {
+    border-radius: 1rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-card .card-body {
+    padding: 1rem 0.75rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-card .card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.3;
+    min-height: auto;
+    margin-bottom: 0.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .product-card .card-text_description {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    min-height: auto;
+    margin-bottom: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex-grow: 1;
+  }
+
+  .product-card .card-text_stock {
+    margin-bottom: 0.75rem;
+  }
+
+  .product-card .card-text_stock small {
+    font-size: 0.75rem;
+  }
+
+  .product-card .text-primary {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+
+  .product-card .add-to-cart-button {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    margin-top: auto;
+  }
+
+  .product-card .card-img-top {
+    height: 180px;
+    object-fit: cover;
+  }
+}
+
+/* Çok küçük ekranlar için ek optimizasyon */
+@media (max-width: 575.98px) {
+  .product-card .card-img-top {
+    height: 160px;
+  }
+
+  .product-card .card-title {
+    font-size: 0.9rem;
+  }
+
+  .product-card .card-text_description {
+    font-size: 0.75rem;
+  }
+
+  .product-card .text-primary {
+    font-size: 1rem;
+  }
+
+  .product-card .add-to-cart-button {
+    font-size: 0.8rem;
+    padding: 0.45rem 0.6rem;
+  }
+}
+
 /* Stokta yok mesajı */
 .out-of-stock small {
   color: #e74c3c !important;
