@@ -12,35 +12,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Kendi Özel Stillerimiz -->
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Favoriler sayfasına özel stiller */
-        body { display: flex; flex-direction: column; min-height: 100vh; }
-        main.container { flex-grow: 1; }
-        .favorites-container { padding: 2rem; background-color: #fff; border-radius: 0.75rem; box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.08); }
-        .favorite-item { display: flex; align-items: center; border-bottom: 1px solid #e9ecef; padding: 1.25rem 0; }
-        .favorite-item:last-child { border-bottom: none; }
-        .favorite-item img { width: 100px; height: 100px; object-fit: cover; margin-right: 1.5rem; border-radius: 0.375rem; border: 1px solid #dee2e6;}
-        .favorite-item-details { flex-grow: 1; }
-        .favorite-item-details h4 { margin: 0 0 0.5rem 0; font-size: 1.2rem; font-weight: 600; color: #343a40;}
-        .favorite-item-details p { margin: 0 0 0.25rem 0; color: #6c757d; font-size: 0.9rem; }
-        .favorite-item-price { font-weight: 700; font-size: 1.3rem; color: #0d6efd; margin-right: 1rem;}
-        .favorite-item-actions { display: flex; flex-direction: column; gap: 0.5rem; }
-        .favorite-item-remove button { background: none; border: none; color: #dc3545; cursor: pointer; font-size: 1.2rem; padding: 0.5rem; line-height: 1;}
-        .favorite-item-remove button:hover { color: #a71d2a; }
-        .favorites-summary { margin-top: 2.5rem; text-align: center; border-top: 2px solid #dee2e6; padding-top: 1.5rem; }
-        .favorites-summary h3 { margin-bottom: 1rem; font-weight: 600; color: #343a40; }
-        .favorites-actions button { padding: 0.75rem 1.5rem; font-size: 1.05em; cursor: pointer; border-radius: 0.5rem; margin: 0.5rem; font-weight: 500;}
-        .empty-favorites-message { text-align: center; padding: 3rem 1rem; color: #6c757d; font-size: 1.2rem; }
-        .empty-favorites-message i { font-size: 3rem; display: block; margin-bottom: 1rem; color: #ced4da;}
-        .btn-trendyol { background: #f27a1a; border: none; color: white; }
-        .btn-trendyol:hover { background: #e06c0d; color: white; }
-    </style>
 </head>
 <body>
+    <!-- Floating vegetables background -->
+    <div class="floating-veggies">
+        <div class="veggie">🥒</div>
+        <div class="veggie">🥬</div>
+        <div class="veggie">🥦</div>
+        <div class="veggie">🌿</div>
+        <div class="veggie">🥒</div>
+        <div class="veggie">🥬</div>
+        <div class="veggie">🥦</div>
+        <div class="veggie">🌿</div>
+        <div class="veggie">🥒</div>
+        <div class="veggie">🥬</div>
+    </div>
+
     <!-- Navbar (Header) -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm sticky-top main-navbar">
         <div class="container">
-            <a class="navbar-brand fw-bold fs-4" href="/">Tansu Şahal Salamura</a>
+            <a class="navbar-brand fw-bold fs-4" href="/">
+                <span class="brand-text">
+                    <span class="brand-line-1">Tansu Şahal</span>
+                    <span class="brand-line-2">Salamura</span>
+                </span>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -70,20 +66,39 @@
 
     <main class="container my-5">
         <div class="favorites-container">
-            <h2 class="mb-4"><i class="fas fa-heart text-danger me-2"></i>Favorilerim</h2>
+            <div class="text-center mb-4">
+                <h2 class="mb-3">
+                    <i class="fas fa-heart text-danger me-2"></i>
+                    <span style="background: linear-gradient(45deg, var(--primary-green), var(--accent-green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;">Favorilerim</span>
+                </h2>
+                <div class="badge bg-success fs-6 px-3 py-2 rounded-pill mb-3">
+                    <i class="fas fa-heart me-1"></i>
+                    <span id="favorites-total-count">0</span> Ürün
+                </div>
+                <p class="text-muted">Beğendiğiniz ürünleri buradan takip edebilirsiniz</p>
+            </div>
+
             <div id="favorites-items-list">
                 <!-- Favori ürünleri buraya JavaScript ile eklenecek -->
-                <div class="empty-favorites-message" style="display: none;">
-                    <i class="fas fa-heart-broken"></i>
-                    <p>Henüz favori ürününüz bulunmuyor.</p>
-                    <a href="/" class="btn btn-primary rounded-pill px-4">Ürünleri Keşfet</a>
+            </div>
+
+            <div class="empty-favorites-message" style="display: none;">
+                <div class="text-center py-5">
+                    <i class="fas fa-heart-broken text-muted mb-3" style="font-size: 4rem;"></i>
+                    <h3 class="text-muted mb-3">Henüz favori ürününüz bulunmuyor</h3>
+                    <p class="text-muted mb-4">Beğendiğiniz ürünleri favorilere ekleyerek daha sonra kolayca ulaşabilirsiniz.</p>
+                    <a href="/" class="btn btn-primary rounded-pill px-4">
+                        <i class="fas fa-shopping-bag me-2"></i>Ürünleri Keşfet
+                    </a>
                 </div>
             </div>
 
             <div class="favorites-summary" style="display: none;">
-                <h3>Toplam <span id="favorites-total-count" class="text-danger">0</span> favori ürün</h3>
+                <h3>Toplam <span id="favorites-total-count-summary" class="text-danger">0</span> favori ürün</h3>
                 <div class="favorites-actions mt-3">
-                    <button class="btn btn-danger clear-favorites-button"><i class="fas fa-trash-alt me-1"></i> Tüm Favorileri Temizle</button>
+                    <button class="btn btn-danger clear-favorites-button">
+                        <i class="fas fa-trash-alt me-1"></i> Tüm Favorileri Temizle
+                    </button>
                 </div>
             </div>
         </div>
